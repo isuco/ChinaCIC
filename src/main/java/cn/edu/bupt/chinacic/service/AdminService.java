@@ -1,9 +1,10 @@
 package cn.edu.bupt.chinacic.service;
 
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
+import cn.edu.bupt.chinacic.pojo.po.ExpertProject;
 import cn.edu.bupt.chinacic.pojo.po.Project;
+import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
-import cn.edu.bupt.chinacic.util.Constants;
 import cn.edu.bupt.chinacic.util.Prize;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.multipdf.Splitter;
@@ -24,29 +25,35 @@ import java.util.Optional;
 public class AdminService {
 
     private ProjectRepository projectRepository;
+    private ExpertRepository expertRepository;
 
     @Autowired
     public void setProjectRepository(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
+    @Autowired
+    public void setExpertRepository(ExpertRepository expertRepository) {
+        this.expertRepository = expertRepository;
+    }
+
     public synchronized boolean startVote(String type) {
         ConfigService.voteItems.clear();
         switch (type) {
             case "特等奖":
-                Constants.prize = Prize.SPECIAL;
+                ConfigService.prize = Prize.SPECIAL;
                 ConfigService.voteItems.add("特等奖");
                 break;
             case "一等奖":
-                Constants.prize = Prize.FIRST;
+                ConfigService.prize = Prize.FIRST;
                 ConfigService.voteItems.add("一等奖");
                 break;
             case "二等奖":
-                Constants.prize = Prize.SECOND;
+                ConfigService.prize = Prize.SECOND;
                 ConfigService.voteItems.add("二等奖");
                 break;
             case "三等奖":
-                Constants.prize = Prize.THIRD;
+                ConfigService.prize = Prize.THIRD;
                 ConfigService.voteItems.add("三等奖");
                 break;
             default:
@@ -55,6 +62,7 @@ public class AdminService {
                 ConfigService.voteItems.add("三等奖");
         }
         ConfigService.voteItems.add("无");
+//        expertRepository.updateUnVoted();
         return true;
     }
 
@@ -105,7 +113,7 @@ public class AdminService {
                         mainComUnit = content.substring(comStart, comEnd).replace("\n", "");
                     }
                     String[] split = childFile.getName().split(" ");
-                    Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit);
+                    Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getPath());
                     if (project == null) {
                         log.error("项目{}持久化失败", childFile.getName());
                     } else {
@@ -118,13 +126,14 @@ public class AdminService {
     }
 
     @Transactional
-    public Project insertProject(String number, String name, String mainRecUnit, String mainComUnit) {
+    public Project insertProject(String number, String name, String mainRecUnit, String mainComUnit, String filePath) {
         Project project = new Project();
         project.setNumber(number);
         project.setName(name);
         project.setMainCompUnit(mainComUnit);
         project.setRecoUnit(mainRecUnit);
         project.setPublish(false);
+        project.setProjectPath(filePath);
         project.setType(ConfigService.types.get(number.charAt(0)));
         return projectRepository.save(project);
     }
@@ -155,7 +164,13 @@ public class AdminService {
     public void publishProject(List<PublishProjectJo> publishProjects) {
         for (PublishProjectJo publishProject : publishProjects) {
             Optional<Project> project = projectRepository.findById(publishProject.getProjectId());
-            project.ifPresent(p -> p.setPublish(publishProject.isPublish()));
+            project.ifPresent(p -> {
+                p.setPublish(publishProject.isPublish());
+                for (ExpertProject expertProject : p.getExperts()) {
+                    expertProject.setVoted(false);
+                }
+                projectRepository.save(p);
+            });
         }
     }
 }

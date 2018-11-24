@@ -18,6 +18,8 @@ public class Expert {
     private String ip;
     @Column(length = 16)
     private String name;
+    @Column(name = "is_voted")
+    private boolean isVoted;
 
     @OneToMany(mappedBy = "expert", cascade = CascadeType.ALL)
     private List<ExpertProject> projects = new ArrayList<>();

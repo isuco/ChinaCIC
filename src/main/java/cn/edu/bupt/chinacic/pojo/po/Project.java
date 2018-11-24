@@ -44,6 +44,9 @@ public class Project {
     @Column(name = "third_num")
     private int thirdNum;
 
+    @Column(name = "project_path")
+    private String projectPath;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ExpertProject> experts = new ArrayList<>();
 

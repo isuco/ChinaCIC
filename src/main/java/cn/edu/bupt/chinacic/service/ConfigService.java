@@ -1,5 +1,6 @@
 package cn.edu.bupt.chinacic.service;
 
+import cn.edu.bupt.chinacic.util.Prize;
 import lombok.extern.slf4j.Slf4j;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -25,6 +26,8 @@ public class ConfigService {
     public static Map<Character, String> types;
 
     public static List<String> voteItems = new ArrayList<>();
+
+    public static Prize prize = null;
 
     @PostConstruct
     public void init() {
