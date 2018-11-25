@@ -1,5 +1,4 @@
 body{
-	width:98%;
 	font-family:华文新魏;
 	MARGIN-TOP: 0px;
 }
@@ -29,8 +28,8 @@ body{
 
 .line{
 	background-color:#E5ECF9;
-	border-top:1px solid #3366CC;
-	height:28px
+	height:28px;
+	width: 100%;
 }
 
 .clear{

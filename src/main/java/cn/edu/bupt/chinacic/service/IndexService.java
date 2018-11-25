@@ -27,11 +27,15 @@ public class IndexService {
 
     @Transactional
     public List<Project> getAllProjects() {
-        return projectRepository.findAll();
+        List<Project> projects = projectRepository.findAll();
+        for (Project project : projects) {
+            project.setName(project.getNumber() + " " + project.getName());
+        }
+        return projects;
     }
 
     @Transactional
-    public boolean needRegistry(String ip){
+    public boolean needRegistry(String ip) {
         return !expertRepository.existsByIp(ip);
     }
 }

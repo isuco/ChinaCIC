@@ -20,13 +20,9 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String index(HttpServletRequest request, ModelMap resMap) {
-        String ip = NetworkUtils.getIpAddr(request);
-        if (indexService.needRegistry(ip)) {
-            return "registry";
-        }else {
-            return "index";
-        }
+    public String index() {
+
+        return "index";
     }
 
 }

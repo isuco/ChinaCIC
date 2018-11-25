@@ -2,14 +2,16 @@ package cn.edu.bupt.chinacic.pojo.vo;
 
 import cn.edu.bupt.chinacic.pojo.po.Project;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
 @Data
+@NoArgsConstructor
 public class PublishProjectVo {
 
-    private long id;
-    private String name;
-    private boolean isPublish;
+    public long id;
+    public String name;
+    public boolean isPublish;
 
     public PublishProjectVo(Project project) {
         BeanUtils.copyProperties(project, this);

@@ -3,6 +3,7 @@ package cn.edu.bupt.chinacic.service;
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
 import cn.edu.bupt.chinacic.pojo.po.ExpertProject;
 import cn.edu.bupt.chinacic.pojo.po.Project;
+import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.NumNameRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -48,6 +50,7 @@ public class AdminService {
         this.numNameRepository = numNameRepository;
     }
 
+    @Transactional
     public synchronized boolean startVote(String type) {
         ConfigService.voteItems.clear();
         switch (type) {
@@ -73,6 +76,7 @@ public class AdminService {
                 ConfigService.voteItems.add("三等奖");
         }
         ConfigService.voteItems.add("无");
+        expertRepository.updateUnVoted();
 //        expertRepository.updateUnVoted();
         return true;
     }
@@ -184,6 +188,7 @@ public class AdminService {
     @Transactional
     public void publishProject(List<PublishProjectJo> publishProjects) {
         for (PublishProjectJo publishProject : publishProjects) {
+            System.out.println(publishProject.getProjectId() + " " + publishProject.isPublish());
             Optional<Project> project = projectRepository.findById(publishProject.getProjectId());
             project.ifPresent(p -> {
                 p.setPublish(publishProject.isPublish());
@@ -193,6 +198,19 @@ public class AdminService {
                 projectRepository.save(p);
             });
         }
+    }
+
+    @Transactional
+    public List<PublishProjectVo> getPublishVos(){
+        return projectRepository.findAll().stream()
+                .map(p->{
+                    PublishProjectVo projectVo = new PublishProjectVo();
+                    projectVo.setId(p.getId());
+                    projectVo.setName(p.getNumber()+" "+p.getName());
+                    projectVo.setPublish(p.isPublish());
+                    return projectVo;
+                })
+                .collect(Collectors.toList());
     }
 
     @Transactional

@@ -1,13 +1,11 @@
 package cn.edu.bupt.chinacic.controller;
 
-import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.HomeTreeVo;
 import cn.edu.bupt.chinacic.service.UserService;
 import cn.edu.bupt.chinacic.util.CommonResult;
 import cn.edu.bupt.chinacic.util.NetworkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -26,6 +24,11 @@ public class UserController {
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("registry")
+    public String userRegistryView(){
+        return "registry";
     }
 
     @PostMapping("registry")

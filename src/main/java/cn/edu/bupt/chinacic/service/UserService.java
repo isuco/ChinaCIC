@@ -50,9 +50,9 @@ public class UserService {
     }
 
     @Transactional
-    public List<HomeTreeVo> getAllPublishedProjects(){
+    public List<HomeTreeVo> getAllPublishedProjects() {
         return projectRepository.queryByPublish().stream()
-                .map(p-> new HomeTreeVo(p.getName(), true, p.getProjectPath()))
+                .map(p -> new HomeTreeVo(p.getNumber() + " " + p.getName(), true, p.getProjectPath()))
                 .collect(Collectors.toList());
     }
 

@@ -6,6 +6,6 @@ import lombok.Data;
 public class PublishProjectJo {
 
     private long projectId;
-    private boolean isPublish;
+    private boolean publish;
 
 }
