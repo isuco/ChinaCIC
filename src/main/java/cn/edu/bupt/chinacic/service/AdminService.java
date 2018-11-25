@@ -12,12 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.dom4j.DocumentHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import sun.text.resources.uk.CollationData_uk;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,6 +75,9 @@ public class AdminService {
         }
         ConfigService.voteItems.add("无");
         expertRepository.updateUnVoted();
+        List<Project> projects = projectRepository.queryByPublish();
+        projects.forEach(p->p.getExperts().forEach(pp->pp.setVoted(false)));
+        projectRepository.saveAll(projects);
 //        expertRepository.updateUnVoted();
         return true;
     }

@@ -1,7 +1,6 @@
 package cn.edu.bupt.chinacic.interceptor;
 
 import cn.edu.bupt.chinacic.service.IndexService;
-import cn.edu.bupt.chinacic.service.UserService;
 import cn.edu.bupt.chinacic.util.NetworkUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

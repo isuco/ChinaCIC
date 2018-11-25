@@ -1,7 +1,6 @@
 package cn.edu.bupt.chinacic.controller;
 
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
-import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.service.AdminService;
 import cn.edu.bupt.chinacic.util.CommonResult;
