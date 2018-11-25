@@ -9,6 +9,8 @@ public interface ExpertRepository extends JpaRepository<Expert, Long> {
 
     Expert queryByIp(String ip);
 
+    boolean existsByIp(String ip);
+
     @Modifying
     @Query("update Expert e set e.isVoted = 0")
     void updateUnVoted();

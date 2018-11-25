@@ -2,6 +2,7 @@ package cn.edu.bupt.chinacic.service;
 
 import cn.edu.bupt.chinacic.pojo.po.Expert;
 import cn.edu.bupt.chinacic.pojo.po.Project;
+import cn.edu.bupt.chinacic.pojo.vo.HomeTreeVo;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
@@ -42,9 +43,17 @@ public class UserService {
         return false;
     }
 
-    public List<PublishProjectVo> getAllProject() {
+    @Transactional
+    public List<PublishProjectVo> getAllProjects() {
         return projectRepository.findAll().stream()
                 .map(PublishProjectVo::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<HomeTreeVo> getAllPublishedProjects(){
+        return projectRepository.queryByPublish().stream()
+                .map(p-> new HomeTreeVo(p.getName(), true, p.getProjectPath()))
+                .collect(Collectors.toList());
     }
 
 }

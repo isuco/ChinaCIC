@@ -194,4 +194,9 @@ public class AdminService {
             });
         }
     }
+
+    @Transactional
+    public List<Project> getAllProjects() {
+        return projectRepository.findAll();
+    }
 }

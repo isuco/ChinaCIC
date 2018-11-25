@@ -1,6 +1,7 @@
 package cn.edu.bupt.chinacic.pojo.po;
 
 import lombok.Data;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "expert")
 @Data
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Expert {
 
     @Id

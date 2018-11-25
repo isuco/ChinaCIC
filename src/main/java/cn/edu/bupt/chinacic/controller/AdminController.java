@@ -5,7 +5,9 @@ import cn.edu.bupt.chinacic.service.AdminService;
 import cn.edu.bupt.chinacic.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,9 @@ import java.util.List;
 public class AdminController {
 
     private AdminService adminService;
+
+    @Value("adminPassword")
+    private String adminPassword;
 
     @Autowired
     public void setAdminService(AdminService adminService) {
@@ -63,6 +68,16 @@ public class AdminController {
         }else{
             adminService.publishProject(publishProjects);
             return CommonResult.success("发布项目成功");
+        }
+    }
+
+    @PostMapping("login")
+    public String adminLogin(@RequestParam String password, ModelMap resMap) {
+        if (adminPassword.equals(password)) {
+            resMap.put("projects", this.adminService.getAllProjects());
+            return "operation";
+        } else {
+            return "redirect: /";
         }
     }
 

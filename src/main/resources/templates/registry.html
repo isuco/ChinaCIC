@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>专家注册</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/registry.css}">
+</head>
+<body>
+
+<div class = "container">
+    <div class="wrapper">
+        <form action="#" th:action="@{/user/registry}" method="post" name="Login_Form" class="form-signin">
+            <h3 class="form-signin-heading">填写姓名注册</h3>
+            <hr class="colorgraph"><br>
+
+            <input type="text" class="form-control" name="name" placeholder="Username" required="" autofocus="" />
+
+            <button class="btn btn-lg btn-primary btn-block"  name="Submit" value="注册" type="Submit">注册</button>
+
+
+            <div class="alert alert-success" role="alert" style="margin-top: 10px" th:if="${error}">
+                <p th:text="${error}"></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+
+<script src="/js/bootstrap.js"/>
+
+</html>
