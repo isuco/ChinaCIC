@@ -4,19 +4,24 @@ import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
 import cn.edu.bupt.chinacic.pojo.po.ExpertProject;
 import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
+import cn.edu.bupt.chinacic.repository.NumNameRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
 import cn.edu.bupt.chinacic.util.Prize;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.dom4j.DocumentHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import sun.text.resources.uk.CollationData_uk;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +31,7 @@ public class AdminService {
 
     private ProjectRepository projectRepository;
     private ExpertRepository expertRepository;
+    private NumNameRepository numNameRepository;
 
     @Autowired
     public void setProjectRepository(ProjectRepository projectRepository) {
@@ -35,6 +41,11 @@ public class AdminService {
     @Autowired
     public void setExpertRepository(ExpertRepository expertRepository) {
         this.expertRepository = expertRepository;
+    }
+
+    @Autowired
+    public void setNumNameRepository(NumNameRepository numNameRepository) {
+        this.numNameRepository = numNameRepository;
     }
 
     public synchronized boolean startVote(String type) {
@@ -68,8 +79,8 @@ public class AdminService {
 
     public boolean parseProject(String dirPath) {
         File dirFile = new File(dirPath);
-        if (!dirFile.exists() || dirFile.isDirectory()) {
-            log.error("文件{}不存在或不是一个目录", dirPath);
+        if (!dirFile.exists() || dirFile.isFile()) {
+            log.error("文件 {} 不存在或不是一个目录", dirPath);
             return false;
         }
         File[] childFiles = dirFile.listFiles(childFile -> childFile.isFile() && childFile.getName().endsWith(".pdf"));
@@ -83,21 +94,31 @@ public class AdminService {
         }
         Splitter splitter = new Splitter();
         if (childFiles != null && childFiles.length > 0) {
+            Arrays.sort(childFiles, Comparator.comparing(File::getName));
             for (File childFile : childFiles) {
                 String content = null;
+                PDDocument document=null;
                 try {
-                    PDDocument document = PDDocument.load(childFile);
+                     document = PDDocument.load(childFile);
                     content = parseOneProject(stripper, splitter, document);
                 } catch (IOException e) {
                     log.error("文件{}不能被PDF解析器解析", childFile.getPath());
                     e.printStackTrace();
+                }finally {
+                    if(document!=null){
+                        try {
+                            document.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+                String mainRecUnit=null, mainComUnit=null;
                 if (content == null || StringUtils.isEmpty(content.trim())) {
                     log.error("文件{}为图片类型PDF", childFile.getPath());
                 } else {
-                    int recStart = content.indexOf("专家推荐") + "专家推荐".length();
+                    int recStart = content.indexOf("提名者") + "专家推荐".length();
                     int recEnd = content.indexOf("项目名称");
-                    String mainRecUnit = null;
                     if (recStart == -1 || recEnd == -1) {
                         log.error("文件{}解析推荐单位或推荐人失败", childFile.getPath());
                     } else {
@@ -105,20 +126,19 @@ public class AdminService {
                     }
 
                     int comStart = content.indexOf("主要完成单位") + "主要完成单位".length();
-                    int comEnd = content.indexOf("保密级别");
-                    String mainComUnit = null;
+                    int comEnd = content.indexOf("项目密级");
                     if (comStart == -1 || comEnd == -1) {
                         log.error("文件{}解析主要完成单位失败", childFile.getPath());
                     } else {
                         mainComUnit = content.substring(comStart, comEnd).replace("\n", "");
                     }
-                    String[] split = childFile.getName().split(" ");
-                    Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getPath());
-                    if (project == null) {
-                        log.error("项目{}持久化失败", childFile.getName());
-                    } else {
-                        log.info("项目{}持久化成功", childFile.getName());
-                    }
+                }
+                String[] split = childFile.getName().split(" ");
+                Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getPath());
+                if (project == null) {
+                    log.error("项目{}持久化失败", childFile.getName());
+                } else {
+                    log.info("项目{}持久化成功", childFile.getName());
                 }
             }
         }
@@ -134,7 +154,8 @@ public class AdminService {
         project.setRecoUnit(mainRecUnit);
         project.setPublish(false);
         project.setProjectPath(filePath);
-        project.setType(ConfigService.types.get(number.charAt(0)));
+        project.setType(this.numNameRepository.queryByNum(String.valueOf(number.charAt(0))).getName());
+//        project.setType(ConfigService.types.get(number.charAt(0)));
         return projectRepository.save(project);
     }
 

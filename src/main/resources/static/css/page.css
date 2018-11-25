@@ -1,0 +1,58 @@
+body {
+    width: 100%;
+    MARGIN-TOP: 0px;
+}
+
+.logo {
+    background: url(../img/logo_ico.png) no-repeat;
+    height: 140px;
+    cursor: pointer
+}
+
+.logo_text {
+    font-size: 50px;
+    font-family: 华文行楷;
+    position: relative;
+    margin: 0 auto;
+    top: 50px;
+    margin-left: 145px;
+}
+
+.line {
+    background-color: #E5ECF9;
+    border-top: 1px solid #3366CC;
+    height: 28px
+}
+
+.clear {
+    line-height: 0;
+}
+
+.left_bar {
+    float: left;
+    width: 25%;
+    border-right: solid #e5ecf9;
+    height: 800px;
+}
+
+.right_bar {
+    float: right;
+    width: 74%;
+    height: 800px;
+}
+
+.vote_bar {
+    float: left;
+    width: 100%;
+    margin-left: 4%;
+    margin-top: 5px;
+}
+
+.foot_bar {
+    clear: both;
+}
+
+.award_btn {
+    width: 100px;
+    margin-left: 8px;
+}

@@ -44,6 +44,7 @@ public class AdminController {
     }
 
     @PostMapping("project/ini")
+    @ResponseBody
     public CommonResult parseProject(@RequestParam String dirPath) {
         if (StringUtils.isEmpty(dirPath)) {
             return CommonResult.failure("请填写文件路径");
