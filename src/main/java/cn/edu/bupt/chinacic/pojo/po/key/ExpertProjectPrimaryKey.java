@@ -1,5 +1,6 @@
 package cn.edu.bupt.chinacic.pojo.po.key;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.Column;
@@ -8,6 +9,7 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
+@AllArgsConstructor
 public class ExpertProjectPrimaryKey implements Serializable{
 
     @Column(name = "expert_id")
