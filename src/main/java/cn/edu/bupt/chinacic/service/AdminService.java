@@ -69,6 +69,7 @@ public class AdminService {
                 ConfigService.voteItems.add("三等奖");
                 break;
             default:
+                ConfigService.prize = Prize.ALL;
                 ConfigService.voteItems.add("一等奖");
                 ConfigService.voteItems.add("二等奖");
                 ConfigService.voteItems.add("三等奖");
@@ -76,7 +77,7 @@ public class AdminService {
         ConfigService.voteItems.add("无");
         expertRepository.updateUnVoted();
         List<Project> projects = projectRepository.queryByPublish();
-        projects.forEach(p->p.getExperts().forEach(pp->pp.setVoted(false)));
+        projects.forEach(p -> p.getExperts().forEach(pp -> pp.setVoted(false)));
         projectRepository.saveAll(projects);
 //        expertRepository.updateUnVoted();
         return true;
@@ -102,15 +103,15 @@ public class AdminService {
             Arrays.sort(childFiles, Comparator.comparing(File::getName));
             for (File childFile : childFiles) {
                 String content = null;
-                PDDocument document=null;
+                PDDocument document = null;
                 try {
-                     document = PDDocument.load(childFile);
+                    document = PDDocument.load(childFile);
                     content = parseOneProject(stripper, splitter, document);
                 } catch (IOException e) {
                     log.error("文件{}不能被PDF解析器解析", childFile.getPath());
                     e.printStackTrace();
-                }finally {
-                    if(document!=null){
+                } finally {
+                    if (document != null) {
                         try {
                             document.close();
                         } catch (IOException e) {
@@ -118,7 +119,7 @@ public class AdminService {
                         }
                     }
                 }
-                String mainRecUnit=null, mainComUnit=null;
+                String mainRecUnit = null, mainComUnit = null;
                 if (content == null || StringUtils.isEmpty(content.trim())) {
                     log.error("文件{}为图片类型PDF", childFile.getPath());
                 } else {
@@ -160,6 +161,7 @@ public class AdminService {
         project.setPublish(false);
         project.setProjectPath(filePath);
         project.setType(this.numNameRepository.queryByNum(String.valueOf(number.charAt(0))).getName());
+        project.setPrize("无");
 //        project.setType(ConfigService.types.get(number.charAt(0)));
         return projectRepository.save(project);
     }
@@ -189,25 +191,21 @@ public class AdminService {
     @Transactional
     public void publishProject(List<PublishProjectJo> publishProjects) {
         for (PublishProjectJo publishProject : publishProjects) {
-            System.out.println(publishProject.getProjectId() + " " + publishProject.isPublish());
             Optional<Project> project = projectRepository.findById(publishProject.getProjectId());
             project.ifPresent(p -> {
                 p.setPublish(publishProject.isPublish());
-                for (ExpertProject expertProject : p.getExperts()) {
-                    expertProject.setVoted(false);
-                }
                 projectRepository.save(p);
             });
         }
     }
 
     @Transactional
-    public List<PublishProjectVo> getPublishVos(){
+    public List<PublishProjectVo> getPublishVos() {
         return projectRepository.findAll().stream()
-                .map(p->{
+                .map(p -> {
                     PublishProjectVo projectVo = new PublishProjectVo();
                     projectVo.setId(p.getId());
-                    projectVo.setName(p.getNumber()+" "+p.getName());
+                    projectVo.setName(p.getNumber() + " " + p.getName());
                     projectVo.setPublish(p.isPublish());
                     return projectVo;
                 })

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>专家投票</title>
+    <link rel="stylesheet" th:href="@{/css/page.css}">
     <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
     <link rel="stylesheet" th:href="@{/css/toastr.min.css}">
-    <link rel="stylesheet" th:href="@{/css/page.css}">
 </head>
 <body>
 <div class="logo" onclick="window.location.href='/'">
@@ -31,13 +31,13 @@
         <tr th:each="dataItem: ${voteData}">
             <td id="projectId" th:text="${dataItem.id}" hidden="hidden"></td>
             <td id="projectNum" th:text="${dataItem.num}"></td>
-            <td id="prize">
-                <select class="form-control" th:each="prize:${prizes}">
-                    <option th:text="prize" th:if="${dataItem.voted}?'selected':''"></option>
-                    <option th:text="prize"></option>
+            <td id="prize" style="width: 10%;">
+                <select class="form-control">
+                    <option th:each="prize:${prizes}" th:text="${prize}"
+                            th:selected="${prize==dataItem.prize}"></option>
                 </select>
             </td>
-            <td id="projectName" th:text="${dataItem.projectName}"></td>
+            <td id="projectName" th:text="${dataItem.projectName}" style="width: 36%;"></td>
             <td id="projectCompUnit" th:text="${dataItem.compUnit}"></td>
         </tr>
         </tbody>
@@ -52,4 +52,53 @@
 <script src="/js/bootstrap.js"></script>
 <script src="/js/toastr.min.js"></script>
 <script src="/js/confirm-dialog.js"></script>
+<script>
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-center",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "2000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    $('#submitVote').on('click', () => {
+        Ewin.confirm({message: "确认投票？"}).on(function (e) {
+            if (!e) {
+                return;
+            }
+            let projects = [];
+            $('#voteBody').find('tr').each(function () {
+                let prize = $(this).find('select').val();
+                let project = {};
+                project['projectId'] = $(this).find('#projectId').text();
+                project['prize'] = prize;
+                projects.push(project);
+            });
+            console.log(JSON.stringify(projects));
+            $.ajax({
+                url: '/user/vote',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(projects),
+                success: (result) => {
+                    if (result['code'] === 'SUCCESS') {
+                        toastr.info(result['reason']);
+                    } else {
+                        toastr.error(result['reason']);
+                    }
+                }
+            })
+        })
+    })
+</script>
 </html>

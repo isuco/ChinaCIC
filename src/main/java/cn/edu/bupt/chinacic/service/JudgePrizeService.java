@@ -19,22 +19,21 @@ public class JudgePrizeService {
     @Value("${third-threshold}")
     private int thirdThreshold;
 
-    public boolean isSpecial(Project project) {
-        return project.getSpecialNum() >= specialThreshold;
+    public boolean isSpecial(int special) {
+        return special >= specialThreshold;
     }
 
-    public boolean isFirst(Project project) {
-        return !isSpecial(project) && project.getFirstNum() + project.getSpecialNum() >= firstThreshold;
+    public boolean isFirst(int special, int first) {
+        return !isSpecial(special) && special + first >= firstThreshold;
     }
 
-    public boolean isSecond(Project project) {
-        return !isSpecial(project) && !isFirst(project) && project.getSecondNum() + project.getFirstNum()
-                + project.getSecondNum() >= secondThreshold;
+    public boolean isSecond(int special, int first, int second) {
+        return !isSpecial(special) && !isFirst(special, first) && special + first + second >= secondThreshold;
     }
 
-    public boolean isThird(Project project) {
-        return !isSpecial(project) && !isFirst(project) && !isSecond(project) && project.getThirdNum()
-                + project.getSecondNum() + project.getSecondNum() + project.getSecondNum() >= thirdThreshold;
+    public boolean isThird(int special, int first, int second, int third) {
+        return !isSpecial(special) && !isFirst(special, first) && !isSecond(special, first, second) &&
+                special + first + second + third >= thirdThreshold;
     }
 
 }

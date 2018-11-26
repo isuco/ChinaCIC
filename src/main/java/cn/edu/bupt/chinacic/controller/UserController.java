@@ -1,5 +1,6 @@
 package cn.edu.bupt.chinacic.controller;
 
+import cn.edu.bupt.chinacic.pojo.jo.ExpertVoteJo;
 import cn.edu.bupt.chinacic.pojo.vo.HomeTreeVo;
 import cn.edu.bupt.chinacic.pojo.vo.VoteItemVo;
 import cn.edu.bupt.chinacic.service.ConfigService;
@@ -56,7 +57,7 @@ public class UserController {
             return "registry";
         } else {
             log.info("用户 ip = {}, name = {}注册成功", ip, name);
-            return "index";
+            return "redirect:/";
         }
     }
 
@@ -76,6 +77,7 @@ public class UserController {
         String ip = NetworkUtils.getIpAddr(request);
         if (!StringUtils.isEmpty(ip) || !indexService.needRegistry(ip)) {
             List<VoteItemVo> vos = userService.getVoteData(ip);
+            System.out.println(vos.size());
             if (vos.size() == 0) {
                 resMap.addAttribute("error", "没有参与投票的项目");
             } else {
@@ -86,6 +88,20 @@ public class UserController {
             resMap.addAttribute("error", "没有投票资格");
         }
         return "expert-vote";
+    }
+
+    @PostMapping("vote")
+    @ResponseBody
+    public CommonResult expertVote(HttpServletRequest request, @RequestBody List<ExpertVoteJo> expertVotes) {
+        String ip = NetworkUtils.getIpAddr(request);
+        if (StringUtils.isEmpty(ip) || indexService.needRegistry(ip)) {
+            return CommonResult.failure("请先注册");
+        }
+        if (userService.isVoted(ip)) {
+            return CommonResult.failure("不能重复投票");
+        }
+        userService.expertVote(ip, expertVotes);
+        return CommonResult.success("投票成功");
     }
 
 }
