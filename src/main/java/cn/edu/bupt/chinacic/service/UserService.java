@@ -12,7 +12,6 @@ import cn.edu.bupt.chinacic.repository.ExpertProjectRepository;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
 import cn.edu.bupt.chinacic.util.Prize;
-import org.hibernate.dialect.FirebirdDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -189,8 +188,8 @@ public class UserService {
                     else if (judgePrizeService.isThird(special, level1, level2, level3)) project.setPrize("三等奖");
                     else project.setPrize("无");
                 }
-                projectRepository.save(project);
             }
+            projectRepository.saveAll(projects);
         }
     }
 

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>排序结果</title>
+    <link th:href="@{/css/page.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
+
+<body>
+
+<script type="text/javascript">
+    var today = new Date(); //新建一个Date对象
+    var year = today.getFullYear();//查询年份
+
+    document.write("<h2 class='print_head'>" + year + "年中国通信学会科学技术奖评审工作系统" + "</h2>");
+</script>
+
+<div id="vote_bar1" th:if="${numberOfWaiting == 0} and ${showSpecial}" class="container table-responsive text-center">
+    <h3>特等奖</h3>
+    <table style="margin-top: 40px;">
+        <thead class="tbtrTitle">
+        <tr style="font-size: 15px">
+            <td style="width: 5%;">收序</td>
+            <td style="width: 8%;">特等奖</td>
+            <td style="width: 8%;">一等奖</td>
+            <td style="width: 8%;">二等奖</td>
+            <td style="width: 8%;">三等奖</td>
+            <td style="width: 30%;">项目名称</td>
+            <td>完成单位</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}" th:if="${project.prize eq '特等奖'}">
+            <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.name}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.mainCompUnit}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div id="vote_bar2" th:if="${numberOfWaiting == 0} and ${showFirst}" class="container table-responsive text-center">
+    <h3>一等奖</h3>
+    <table>
+        <thead class="tbtrTitle">
+        <tr style="font-size: 15px">
+            <td style="width: 5%;">收序</td>
+            <td style="width: 8%;">特等奖</td>
+            <td style="width: 8%;">一等奖</td>
+            <td style="width: 8%;">二等奖</td>
+            <td style="width: 8%;">三等奖</td>
+            <td style="width: 30%;">项目名称</td>
+            <td>完成单位</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}" th:if="${project.prize eq '一等奖'}">
+            <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.name}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.mainCompUnit}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div id="vote_bar3" th:if="${numberOfWaiting == 0} and ${showSecond}" class="container table-responsive text-center">
+    <h3>二等奖</h3>
+    <table>
+        <thead class="tbtrTitle">
+        <tr style="font-size: 15px">
+            <td style="width: 5%;">收序</td>
+            <td style="width: 8%;">特等奖</td>
+            <td style="width: 8%;">一等奖</td>
+            <td style="width: 8%;">二等奖</td>
+            <td style="width: 8%;">三等奖</td>
+            <td style="width: 30%;">项目名称</td>
+            <td>完成单位</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}" th:if="${project.prize eq '二等奖'}">
+            <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.name}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.mainCompUnit}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="vote_bar4" th:if="${numberOfWaiting == 0} and ${showThird}" class="container table-responsive text-center">
+    <h3>三等奖</h3>
+    <table>
+        <thead class="tbtrTitle">
+        <tr style="font-size: 15px">
+            <td style="width: 5%;">收序</td>
+            <td style="width: 8%;">特等奖</td>
+            <td style="width: 8%;">一等奖</td>
+            <td style="width: 8%;">二等奖</td>
+            <td style="width: 8%;">三等奖</td>
+            <td style="width: 30%;">项目名称</td>
+            <td>完成单位</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project : ${projects}" th:if="${project.prize eq '三等奖'}">
+            <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
+            <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.name}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.mainCompUnit}">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="text-center">
+    <p style="font-size:15px;margin-top: 20px"><a href="admin?page=rank">组长签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+    </p>
+</div>
+</body>
+</html>

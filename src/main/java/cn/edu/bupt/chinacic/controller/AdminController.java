@@ -1,6 +1,7 @@
 package cn.edu.bupt.chinacic.controller;
 
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
+import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.service.AdminService;
 import cn.edu.bupt.chinacic.util.CommonResult;
@@ -13,7 +14,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("admin")
@@ -28,6 +31,11 @@ public class AdminController {
     @Autowired
     public void setAdminService(AdminService adminService) {
         this.adminService = adminService;
+    }
+
+    @GetMapping("/")
+    public String adminRedirect() {
+        return "redirect:/admin/operation-publish";
     }
 
     @GetMapping("operation-publish")
@@ -108,6 +116,62 @@ public class AdminController {
         } else {
             adminService.publishProject(publishProjects);
             return CommonResult.success("发布项目成功");
+        }
+    }
+
+    @GetMapping("vote-result")
+    public String getVoteResultView(@RequestParam String type, ModelMap resMap) {
+        if (adminService.getUnVotedCount() == 0) {
+            List<Project> projects = adminService.getVoteResult();
+
+            resMap.put("projects", projects);
+            int special = 0, level1 = 0, level2 = 0, level3 = 0;
+            for (Project p : projects) {
+                special += p.getSpecialNum();
+                level1 += p.getFirstNum();
+                level2 += p.getSecondNum();
+                level3 += p.getThirdNum();
+            }
+            resMap.put("totalOfSpecial", special);
+            if (special > 0) resMap.put("showSpecial", true);
+            resMap.put("totalOfFirst", level1);
+            if (level1 > 0) resMap.put("showFirst", true);
+            resMap.put("totalOfSecond", level2);
+            if (level2 > 0) resMap.put("showSecond", true);
+            resMap.put("totalOfThird", level3);
+            if (level3 > 0) resMap.put("showThird", true);
+            resMap.put("numberOfWaiting", 0);
+        }
+        switch (type) {
+            case "origin":
+                return "vote-result";
+            case "origin-print":
+                return "vote-result-print";
+            case "rank":
+                return "rank-vote-result";
+            default:
+                return "rank-vote-result-print";
+        }
+    }
+
+//    @GetMapping("result/print")
+//    public String getVoteResultPrint(ModelMap resMap) {
+//        getVoteResultData(resMap);
+//        return "vote-result-print";
+//    }
+
+    @GetMapping("vote/finish")
+    @ResponseBody
+    public CommonResult isVoteFinished() {
+        long unVotedCount = adminService.getUnVotedCount();
+        Map<String, Object> res = new HashMap<>();
+        if (unVotedCount == 0) {
+            res.put("status", "finish");
+            return CommonResult.success("投票结束", res);
+        } else {
+            res.put("status", "unFinish");
+            res.put("count", unVotedCount);
+            return CommonResult.success("投票未结束", res);
         }
     }
 

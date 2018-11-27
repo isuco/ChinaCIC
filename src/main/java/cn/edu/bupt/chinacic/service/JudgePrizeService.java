@@ -1,6 +1,5 @@
 package cn.edu.bupt.chinacic.service;
 
-import cn.edu.bupt.chinacic.pojo.po.Project;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

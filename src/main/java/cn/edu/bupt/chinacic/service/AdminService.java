@@ -1,7 +1,6 @@
 package cn.edu.bupt.chinacic.service;
 
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
-import cn.edu.bupt.chinacic.pojo.po.ExpertProject;
 import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
@@ -140,7 +139,7 @@ public class AdminService {
                     }
                 }
                 String[] split = childFile.getName().split(" ");
-                Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getPath());
+                Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getName());
                 if (project == null) {
                     log.error("项目{}持久化失败", childFile.getName());
                 } else {
@@ -215,5 +214,32 @@ public class AdminService {
     @Transactional
     public List<Project> getAllProjects() {
         return projectRepository.findAll();
+    }
+
+    @Transactional
+    public long getUnVotedCount() {
+        return expertRepository.count() - expertRepository.votedCount();
+    }
+
+    @Transactional
+    public List<Project> getVoteResult() {
+        return projectRepository.queryByPublish().stream()
+                .map(p -> {
+                    Project target = new Project(p);
+                    target.setSpecialNum(0);
+                    target.setFirstNum(0);
+                    target.setSecondNum(0);
+                    target.setThirdNum(0);
+                    if (ConfigService.prize == Prize.SPECIAL) {
+                        target.setSpecialNum(p.getSpecialNum());
+                    } else if (ConfigService.prize == Prize.FIRST) {
+                        target.setFirstNum(p.getFirstNum());
+                    } else if (ConfigService.prize == Prize.SECOND) {
+                        target.setSecondNum(p.getSecondNum());
+                    } else if (ConfigService.prize == Prize.THIRD) {
+                        target.setThirdNum(p.getThirdNum());
+                    }
+                    return target;
+                }).collect(Collectors.toList());
     }
 }

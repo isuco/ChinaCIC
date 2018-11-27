@@ -1,6 +1,8 @@
 package cn.edu.bupt.chinacic.pojo.po;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,7 +11,12 @@ import java.util.List;
 @Entity
 @Table(name = "project")
 @Data
+@NoArgsConstructor
 public class Project {
+
+    public Project(Project project) {
+        BeanUtils.copyProperties(project, this);
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
