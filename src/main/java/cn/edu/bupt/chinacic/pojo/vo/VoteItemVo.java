@@ -11,5 +11,6 @@ public class VoteItemVo {
     private String projectName;
     private String compUnit;
     private String prize;
+    private String type;
 
 }

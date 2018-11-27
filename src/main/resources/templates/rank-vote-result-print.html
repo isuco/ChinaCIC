@@ -18,14 +18,15 @@
 
 <div id="vote_bar1" th:if="${numberOfWaiting == 0} and ${showSpecial}" class="container table-responsive text-center">
     <h3>特等奖</h3>
-    <table style="margin-top: 40px;">
+    <table>
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
             <td style="width: 5%;">收序</td>
-            <td style="width: 8%;">特等奖</td>
-            <td style="width: 8%;">一等奖</td>
-            <td style="width: 8%;">二等奖</td>
-            <td style="width: 8%;">三等奖</td>
+            <td style="width: 6%;">特等奖</td>
+            <td style="width: 6%;">一等奖</td>
+            <td style="width: 6%;">二等奖</td>
+            <td style="width: 6%;">三等奖</td>
+            <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
             <td>完成单位</td>
         </tr>
@@ -37,6 +38,9 @@
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.type}">
+            </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
                 th:text="${project.name}">
             </td>
@@ -53,10 +57,11 @@
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
             <td style="width: 5%;">收序</td>
-            <td style="width: 8%;">特等奖</td>
-            <td style="width: 8%;">一等奖</td>
-            <td style="width: 8%;">二等奖</td>
-            <td style="width: 8%;">三等奖</td>
+            <td style="width: 6%;">特等奖</td>
+            <td style="width: 6%;">一等奖</td>
+            <td style="width: 6%;">二等奖</td>
+            <td style="width: 6%;">三等奖</td>
+            <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
             <td>完成单位</td>
         </tr>
@@ -68,6 +73,9 @@
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.type}">
+            </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
                 th:text="${project.name}">
             </td>
@@ -84,10 +92,11 @@
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
             <td style="width: 5%;">收序</td>
-            <td style="width: 8%;">特等奖</td>
-            <td style="width: 8%;">一等奖</td>
-            <td style="width: 8%;">二等奖</td>
-            <td style="width: 8%;">三等奖</td>
+            <td style="width: 6%;">特等奖</td>
+            <td style="width: 6%;">一等奖</td>
+            <td style="width: 6%;">二等奖</td>
+            <td style="width: 6%;">三等奖</td>
+            <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
             <td>完成单位</td>
         </tr>
@@ -99,6 +108,9 @@
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.type}">
+            </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
                 th:text="${project.name}">
             </td>
@@ -116,10 +128,11 @@
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
             <td style="width: 5%;">收序</td>
-            <td style="width: 8%;">特等奖</td>
-            <td style="width: 8%;">一等奖</td>
-            <td style="width: 8%;">二等奖</td>
-            <td style="width: 8%;">三等奖</td>
+            <td style="width: 6%;">特等奖</td>
+            <td style="width: 6%;">一等奖</td>
+            <td style="width: 6%;">二等奖</td>
+            <td style="width: 6%;">三等奖</td>
+            <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
             <td>完成单位</td>
         </tr>
@@ -131,6 +144,9 @@
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.type}">
+            </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
                 th:text="${project.name}">
             </td>

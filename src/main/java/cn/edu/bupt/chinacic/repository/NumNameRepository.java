@@ -3,8 +3,10 @@ package cn.edu.bupt.chinacic.repository;
 import cn.edu.bupt.chinacic.pojo.po.NumToName;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface NumNameRepository extends JpaRepository<NumToName, Long>{
+import java.util.Optional;
 
-    NumToName queryByNum(String num);
+public interface NumNameRepository extends JpaRepository<NumToName, Long> {
+
+    Optional<NumToName> queryByNum(String num);
 
 }

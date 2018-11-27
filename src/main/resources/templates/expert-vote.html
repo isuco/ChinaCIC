@@ -23,6 +23,7 @@
             <th class="text-center" hidden="hidden">ID</th>
             <th class="text-center">收序</th>
             <th class="text-center">奖项</th>
+            <th class="text-center" style="width: 9%;">项目类别</th>
             <th class="text-center">项目名称</th>
             <th class="text-center">主要完成单位</th>
         </tr>
@@ -37,6 +38,7 @@
                             th:selected="${prize==dataItem.prize}"></option>
                 </select>
             </td>
+            <td id="projectType" th:text="${dataItem.type}"></td>
             <td id="projectName" th:text="${dataItem.projectName}" style="width: 36%;"></td>
             <td id="projectCompUnit" th:text="${dataItem.compUnit}"></td>
         </tr>

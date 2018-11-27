@@ -124,7 +124,6 @@ public class AdminController {
         if (adminService.getUnVotedCount() == 0) {
             List<Project> projects = adminService.getVoteResult();
 
-            resMap.put("projects", projects);
             int special = 0, level1 = 0, level2 = 0, level3 = 0;
             for (Project p : projects) {
                 special += p.getSpecialNum();
@@ -141,6 +140,20 @@ public class AdminController {
             resMap.put("totalOfThird", level3);
             if (level3 > 0) resMap.put("showThird", true);
             resMap.put("numberOfWaiting", 0);
+            if (type.contains("rank")) {
+                projects.sort((p1, p2) -> {
+                    if (p1.getSpecialNum() != p2.getSpecialNum()) {
+                        return p1.getSpecialNum() - p2.getSpecialNum();
+                    } else if (p1.getFirstNum() != p2.getSpecialNum()) {
+                        return p1.getFirstNum() - p2.getFirstNum();
+                    } else if (p1.getSecondNum() != p2.getSecondNum()) {
+                        return p1.getSecondNum() - p2.getSecondNum();
+                    } else {
+                        return p1.getThirdNum() - p2.getThirdNum();
+                    }
+                });
+            }
+            resMap.put("projects", projects);
         }
         switch (type) {
             case "origin":

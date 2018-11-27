@@ -14,10 +14,11 @@
         <thead class="tbtrTitle">
         <tr>
             <td style="width: 5%;">收序</td>
-            <td style="width: 8%;">特等奖</td>
-            <td style="width: 8%;">一等奖</td>
-            <td style="width: 8%;">二等奖</td>
-            <td style="width: 8%;">三等奖</td>
+            <td style="width: 7%;">特等奖</td>
+            <td style="width: 7%;">一等奖</td>
+            <td style="width: 7%;">二等奖</td>
+            <td style="width: 7%;">三等奖</td>
+            <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
             <td>完成单位</td>
         </tr>
@@ -29,6 +30,7 @@
             <td class="levelOneScore" style="font-size:15px;" th:text="${project.firstNum}"></td>
             <td class="levelTwoScore" style="font-size:15px;" th:text="${project.secondNum}"></td>
             <td class="levelThreeScore" style="font-size:15px;" th:text="${project.thirdNum}"></td>
+            <td class="levelThreeScore" style="font-size:15px;" th:text="${project.type}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.name}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.mainCompUnit}"></td>
         </tr>
@@ -39,6 +41,7 @@
             <td class="levelOneScore" style="font-size:15px" th:text="${totalOfFirst}">"</td>
             <td class="levelTwoScore" style="font-size:15px" th:text="${totalOfSecond}"></td>
             <td class="levelThreeScore" style="font-size:15px" th:text="${totalOfThird}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>
         </tr>

@@ -90,6 +90,7 @@ public class UserService {
             vo.setNum(project.getNumber());
             vo.setProjectName(project.getNumber() + " " + project.getName());
             vo.setCompUnit(project.getMainCompUnit());
+            vo.setType(project.getType());
             if (!expert.isVoted()) {
                 vo.setVoted(false);
                 vo.setPrize("无");

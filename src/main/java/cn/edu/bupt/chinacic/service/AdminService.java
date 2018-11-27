@@ -1,6 +1,7 @@
 package cn.edu.bupt.chinacic.service;
 
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
+import cn.edu.bupt.chinacic.pojo.po.NumToName;
 import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
@@ -159,7 +160,12 @@ public class AdminService {
         project.setRecoUnit(mainRecUnit);
         project.setPublish(false);
         project.setProjectPath(filePath);
-        project.setType(this.numNameRepository.queryByNum(String.valueOf(number.charAt(0))).getName());
+        Optional<NumToName> numToName = this.numNameRepository.queryByNum(String.valueOf(number.charAt(0)));
+        String type = null;
+        if (numToName.isPresent()) {
+            type = numToName.get().getName();
+        }
+        project.setType(type);
         project.setPrize("无");
 //        project.setType(ConfigService.types.get(number.charAt(0)));
         return projectRepository.save(project);
@@ -226,18 +232,20 @@ public class AdminService {
         return projectRepository.queryByPublish().stream()
                 .map(p -> {
                     Project target = new Project(p);
-                    target.setSpecialNum(0);
-                    target.setFirstNum(0);
-                    target.setSecondNum(0);
-                    target.setThirdNum(0);
-                    if (ConfigService.prize == Prize.SPECIAL) {
-                        target.setSpecialNum(p.getSpecialNum());
-                    } else if (ConfigService.prize == Prize.FIRST) {
-                        target.setFirstNum(p.getFirstNum());
-                    } else if (ConfigService.prize == Prize.SECOND) {
-                        target.setSecondNum(p.getSecondNum());
-                    } else if (ConfigService.prize == Prize.THIRD) {
-                        target.setThirdNum(p.getThirdNum());
+                    if (ConfigService.prize != Prize.ALL) {
+                        target.setSpecialNum(0);
+                        target.setFirstNum(0);
+                        target.setSecondNum(0);
+                        target.setThirdNum(0);
+                        if (p.getPrize().equals(Prize.SPECIAL.type)) {
+                            target.setSpecialNum(p.getSpecialNum());
+                        } else if (p.getPrize().equals(Prize.FIRST.type)) {
+                            target.setFirstNum(p.getFirstNum());
+                        } else if (p.getPrize().equals(Prize.SECOND.type)) {
+                            target.setSecondNum(p.getSecondNum());
+                        } else if (p.getPrize().equals(Prize.THIRD.type)) {
+                            target.setThirdNum(p.getThirdNum());
+                        }
                     }
                     return target;
                 }).collect(Collectors.toList());
