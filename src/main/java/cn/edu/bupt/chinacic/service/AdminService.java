@@ -19,10 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -101,6 +98,7 @@ public class AdminService {
         Splitter splitter = new Splitter();
         if (childFiles != null && childFiles.length > 0) {
             Arrays.sort(childFiles, Comparator.comparing(File::getName));
+            List<Project> projects = new ArrayList<>();
             for (File childFile : childFiles) {
                 String content = null;
                 PDDocument document = null;
@@ -140,19 +138,19 @@ public class AdminService {
                     }
                 }
                 String[] split = childFile.getName().split(" ");
-                Project project = insertProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getName());
-                if (project == null) {
-                    log.error("项目{}持久化失败", childFile.getName());
-                } else {
-                    log.info("项目{}持久化成功", childFile.getName());
-                }
+                projects.add(generateProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getName()));
+//                if (project == null) {
+//                    log.error("项目{}持久化失败", childFile.getName());
+//                } else {
+//                    log.info("项目{}持久化成功", childFile.getName());
+//                }
             }
+            projectRepository.saveAll(projects);
         }
         return true;
     }
 
-    @Transactional
-    public Project insertProject(String number, String name, String mainRecUnit, String mainComUnit, String filePath) {
+    public Project generateProject(String number, String name, String mainRecUnit, String mainComUnit, String filePath) {
         Project project = new Project();
         project.setNumber(number);
         project.setName(name);
@@ -167,8 +165,9 @@ public class AdminService {
         }
         project.setType(type);
         project.setPrize("无");
+        return project;
 //        project.setType(ConfigService.types.get(number.charAt(0)));
-        return projectRepository.save(project);
+//        return projectRepository.save(project);
     }
 
     private String parseOneProject(PDFTextStripper stripper, Splitter splitter, PDDocument document) throws IOException {
@@ -199,7 +198,7 @@ public class AdminService {
             Optional<Project> project = projectRepository.findById(publishProject.getProjectId());
             project.ifPresent(p -> {
                 p.setPublish(publishProject.isPublish());
-                projectRepository.save(p);
+//                projectRepository.save(p);
             });
         }
     }

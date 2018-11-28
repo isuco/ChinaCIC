@@ -13,14 +13,14 @@
     <table>
         <thead class="tbtrTitle">
         <tr>
-            <td style="width: 5%;">收序</td>
+            <td style="width: 5%;">编号</td>
             <td style="width: 7%;">特等奖</td>
             <td style="width: 7%;">一等奖</td>
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
             <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
-            <td>完成单位</td>
+            <td>提名单位</td>
         </tr>
         </thead>
         <tbody>
@@ -32,7 +32,7 @@
             <td class="levelThreeScore" style="font-size:15px;" th:text="${project.thirdNum}"></td>
             <td class="levelThreeScore" style="font-size:15px;" th:text="${project.type}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.name}"></td>
-            <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.mainCompUnit}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.recoUnit}"></td>
         </tr>
 
         <tr>
@@ -49,7 +49,7 @@
     </table>
 </div>
 <div class="text-center">
-    <p style="font-size:15px"><a href="admin?page=rank">组长签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></p>
+    <p style="font-size:15px"><a href="admin?page=rank">主任委员签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></p>
 </div>
 
 <script src="/js/jquery-3.3.1.js"></script>

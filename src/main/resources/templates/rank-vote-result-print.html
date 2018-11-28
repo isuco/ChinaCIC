@@ -18,17 +18,17 @@
 
 <div id="vote_bar1" th:if="${numberOfWaiting == 0} and ${showSpecial}" class="container table-responsive text-center">
     <h3>特等奖</h3>
-    <table>
+    <table style="width: 100%;">
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
-            <td style="width: 5%;">收序</td>
+            <td style="width: 5%;">编号</td>
             <td style="width: 6%;">特等奖</td>
             <td style="width: 6%;">一等奖</td>
             <td style="width: 6%;">二等奖</td>
             <td style="width: 6%;">三等奖</td>
             <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
-            <td>完成单位</td>
+            <td style="width: 31%;">提名单位</td>
         </tr>
         </thead>
         <tbody>
@@ -45,7 +45,7 @@
                 th:text="${project.name}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
-                th:text="${project.mainCompUnit}">
+                th:text="${project.recoUnit}">
             </td>
         </tr>
         </tbody>
@@ -53,17 +53,17 @@
 </div>
 <div id="vote_bar2" th:if="${numberOfWaiting == 0} and ${showFirst}" class="container table-responsive text-center">
     <h3>一等奖</h3>
-    <table>
+    <table style="width: 100%;">
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
-            <td style="width: 5%;">收序</td>
+            <td style="width: 5%;">编号</td>
             <td style="width: 6%;">特等奖</td>
             <td style="width: 6%;">一等奖</td>
             <td style="width: 6%;">二等奖</td>
             <td style="width: 6%;">三等奖</td>
             <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
-            <td>完成单位</td>
+            <td style="width: 31%;">提名单位</td>
         </tr>
         </thead>
         <tbody>
@@ -80,7 +80,7 @@
                 th:text="${project.name}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
-                th:text="${project.mainCompUnit}">
+                th:text="${project.recoUnit}">
             </td>
         </tr>
         </tbody>
@@ -88,17 +88,17 @@
 </div>
 <div id="vote_bar3" th:if="${numberOfWaiting == 0} and ${showSecond}" class="container table-responsive text-center">
     <h3>二等奖</h3>
-    <table>
+    <table style="width: 100%;">
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
-            <td style="width: 5%;">收序</td>
+            <td style="width: 5%;">编号</td>
             <td style="width: 6%;">特等奖</td>
             <td style="width: 6%;">一等奖</td>
             <td style="width: 6%;">二等奖</td>
             <td style="width: 6%;">三等奖</td>
             <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
-            <td>完成单位</td>
+            <td style="width: 31%;">提名单位</td>
         </tr>
         </thead>
         <tbody>
@@ -115,7 +115,7 @@
                 th:text="${project.name}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
-                th:text="${project.mainCompUnit}">
+                th:text="${project.recoUnit}">
             </td>
         </tr>
         </tbody>
@@ -124,17 +124,17 @@
 
 <div id="vote_bar4" th:if="${numberOfWaiting == 0} and ${showThird}" class="container table-responsive text-center">
     <h3>三等奖</h3>
-    <table>
+    <table style="width: 100%;">
         <thead class="tbtrTitle">
         <tr style="font-size: 15px">
-            <td style="width: 5%;">收序</td>
+            <td style="width: 5%;">编号</td>
             <td style="width: 6%;">特等奖</td>
             <td style="width: 6%;">一等奖</td>
             <td style="width: 6%;">二等奖</td>
             <td style="width: 6%;">三等奖</td>
             <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
-            <td>完成单位</td>
+            <td style="width: 31%;">提名单位</td>
         </tr>
         </thead>
         <tbody>
@@ -151,14 +151,14 @@
                 th:text="${project.name}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
-                th:text="${project.mainCompUnit}">
+                th:text="${project.recoUnit}">
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 <div class="text-center">
-    <p style="font-size:15px;margin-top: 20px"><a href="admin?page=rank">组长签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+    <p style="font-size:15px;margin-top: 20px"><a href="admin?page=rank">主任委员签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
     </p>
 </div>
 </body>

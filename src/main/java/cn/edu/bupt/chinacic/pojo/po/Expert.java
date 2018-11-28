@@ -3,6 +3,7 @@ package cn.edu.bupt.chinacic.pojo.po;
 import lombok.Data;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.jws.soap.SOAPBinding;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

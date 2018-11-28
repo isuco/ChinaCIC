@@ -32,14 +32,14 @@
     <table style="margin-top: 40px;">
         <thead class="tbtrTitle">
         <tr>
-            <td style="width: 5%;">收序</td>
+            <td style="width: 5%;">编号</td>
             <td style="width: 7%;">特等奖</td>
             <td style="width: 7%;">一等奖</td>
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
             <td style="width: 13%;">项目类别</td>
             <td style="width: 28%;">项目名称</td>
-            <td>完成单位</td>
+            <td>提名单位</td>
         </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@
             <td class="levelThreeScore" style="font-size:28px;font-weight:bold;" th:text="${project.thirdNum}"></td>
             <td class="levelThreeScore" style="font-size:28px;font-weight:bold;" th:text="${project.type}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.name}"></td>
-            <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.mainCompUnit}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.recoUnit}"></td>
         </tr>
 
         <tr>

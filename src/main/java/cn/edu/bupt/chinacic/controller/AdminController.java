@@ -143,13 +143,15 @@ public class AdminController {
             if (type.contains("rank")) {
                 projects.sort((p1, p2) -> {
                     if (p1.getSpecialNum() != p2.getSpecialNum()) {
-                        return p1.getSpecialNum() - p2.getSpecialNum();
-                    } else if (p1.getFirstNum() != p2.getSpecialNum()) {
-                        return p1.getFirstNum() - p2.getFirstNum();
+                        return p2.getSpecialNum() - p1.getSpecialNum();
+                    } else if (p1.getFirstNum() != p2.getFirstNum()) {
+                        return p2.getFirstNum() - p1.getFirstNum();
                     } else if (p1.getSecondNum() != p2.getSecondNum()) {
-                        return p1.getSecondNum() - p2.getSecondNum();
+                        return p2.getSecondNum() - p1.getSecondNum();
+                    } else if (p1.getThirdNum() != p2.getThirdNum()) {
+                        return p2.getThirdNum() - p1.getThirdNum();
                     } else {
-                        return p1.getThirdNum() - p2.getThirdNum();
+                        return p1.getNumber().compareTo(p2.getNumber());
                     }
                 });
             }
