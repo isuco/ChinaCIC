@@ -19,6 +19,7 @@ public class ConfigService {
     public static List<String> voteItems = new ArrayList<>();
 
     public static Prize prize = null;
+    public static boolean finalWatch = false;
 
 //    @PostConstruct
 //    public void init() {

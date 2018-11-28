@@ -4,6 +4,7 @@ import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
 import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.service.AdminService;
+import cn.edu.bupt.chinacic.service.ConfigService;
 import cn.edu.bupt.chinacic.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,7 @@ public class AdminController {
         if (StringUtils.isEmpty(type)) {
             return CommonResult.failure("开启的投票奖项不能为空");
         } else {
+            ConfigService.finalWatch = false;
             boolean isSuccess = adminService.startVote(type);
             if (isSuccess) {
                 log.info("开启投票{}成功", type);
@@ -82,6 +84,13 @@ public class AdminController {
                 return CommonResult.failure("开启" + type + "投票失败");
             }
         }
+    }
+
+    @PostMapping("final-watch")
+    @ResponseBody
+    public CommonResult finalWatch() {
+        ConfigService.finalWatch = true;
+        return CommonResult.success("success");
     }
 
     @PostMapping("project/ini")
@@ -121,8 +130,13 @@ public class AdminController {
 
     @GetMapping("vote-result")
     public String getVoteResultView(@RequestParam String type, ModelMap resMap) {
-        if (adminService.getUnVotedCount() == 0) {
-            List<Project> projects = adminService.getVoteResult();
+        if (adminService.getUnVotedCount() == 0 || ConfigService.finalWatch) {
+            List<Project> projects;
+            if (!ConfigService.finalWatch) {
+                projects = adminService.getVoteResult();
+            } else {
+                projects = adminService.getRankResult();
+            }
 
             int special = 0, level1 = 0, level2 = 0, level3 = 0;
             for (Project p : projects) {

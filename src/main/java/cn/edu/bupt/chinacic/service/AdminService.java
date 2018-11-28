@@ -138,7 +138,9 @@ public class AdminService {
                     }
                 }
                 String[] split = childFile.getName().split(" ");
-                projects.add(generateProject(split[0], split[1], mainRecUnit, mainComUnit, childFile.getName()));
+
+                projects.add(generateProject(split[0], split[1].substring(0, split[1].lastIndexOf(".")),
+                        mainRecUnit, mainComUnit, childFile.getName()));
 //                if (project == null) {
 //                    log.error("项目{}持久化失败", childFile.getName());
 //                } else {
@@ -236,9 +238,32 @@ public class AdminService {
                         target.setFirstNum(0);
                         target.setSecondNum(0);
                         target.setThirdNum(0);
+                        if (ConfigService.prize == Prize.SPECIAL) {
+                            target.setSpecialNum(p.getSpecialNum());
+                        } else if (ConfigService.prize == Prize.FIRST) {
+                            target.setFirstNum(p.getFirstNum());
+                        } else if (ConfigService.prize == Prize.SECOND) {
+                            target.setSecondNum(p.getSecondNum());
+                        } else if (ConfigService.prize == Prize.THIRD) {
+                            target.setThirdNum(p.getThirdNum());
+                        }
+                    }
+                    return target;
+                }).collect(Collectors.toList());
+    }
+
+    public List<Project> getRankResult() {
+        return projectRepository.queryByPublish().stream()
+                .map(p -> {
+                    Project target = new Project(p);
+                    if (ConfigService.prize != Prize.ALL) {
+                        target.setSpecialNum(0);
+                        target.setFirstNum(0);
+                        target.setSecondNum(0);
+                        target.setThirdNum(0);
                         if (p.getPrize().equals(Prize.SPECIAL.type)) {
                             target.setSpecialNum(p.getSpecialNum());
-                        } else if (p.getPrize().equals(Prize.FIRST.type)) {
+                        } else if ((p.getPrize().equals(Prize.FIRST.type))) {
                             target.setFirstNum(p.getFirstNum());
                         } else if (p.getPrize().equals(Prize.SECOND.type)) {
                             target.setSecondNum(p.getSecondNum());

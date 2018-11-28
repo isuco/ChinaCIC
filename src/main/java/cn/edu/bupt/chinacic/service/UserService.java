@@ -13,8 +13,10 @@ import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
 import cn.edu.bupt.chinacic.util.Prize;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.security.krb5.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,11 @@ public class UserService {
     private ExpertProjectRepository expertProjectRepository;
 
     private JudgePrizeService judgePrizeService;
+
+    private PrintService printService;
+
+    @Value("${resultFilePath}")
+    private String resultFilePath;
 
     @Autowired
     public void setProjectRepository(ProjectRepository projectRepository) {
@@ -50,6 +57,11 @@ public class UserService {
     @Autowired
     public void setJudgePrizeService(JudgePrizeService judgePrizeService) {
         this.judgePrizeService = judgePrizeService;
+    }
+
+    @Autowired
+    public void setPrintService(PrintService printService) {
+        this.printService = printService;
     }
 
     @Transactional
@@ -146,52 +158,77 @@ public class UserService {
         expert.setVoted(true);
         expertRepository.save(expert);
 
+        List<Project> projects = projectRepository.queryByPublish();
+        List<ExpertProject> printExpertProjects = projects.stream().map(p -> {
+            ExpertProjectPrimaryKey key = new ExpertProjectPrimaryKey(expert.getId(), p.getId());
+            ExpertProject persistOne = expertProjectRepository.getOne(key);
+            ExpertProject tmpOne = new ExpertProject();
+            tmpOne.setProject(persistOne.getProject());
+            if (ConfigService.prize == Prize.SPECIAL || ConfigService.prize == Prize.ALL) {
+                tmpOne.setSpecialNum(persistOne.getSpecialNum());
+            } else if (ConfigService.prize == Prize.FIRST || ConfigService.prize == Prize.ALL) {
+                tmpOne.setFirstNum(persistOne.getFirstNum());
+            } else if (ConfigService.prize == Prize.SECOND || ConfigService.prize == Prize.ALL) {
+                tmpOne.setSecondNum(persistOne.getSecondNum());
+            } else if (ConfigService.prize == Prize.THIRD || ConfigService.prize == Prize.ALL) {
+                tmpOne.setThirdNum(persistOne.getThirdNum());
+            }
+            return tmpOne;
+        }).collect(Collectors.toList());
+        printService.printVotePerExpert(printExpertProjects, expert,
+                resultFilePath + ConfigService.prize.type + "/" + expert.getName());
+
         // 更新最终投票结果
         if (expertRepository.votedCount() == expertRepository.count()) {
-            List<Project> projects = projectRepository.queryByPublish();
-            for (Project project : projects) {
-                int level1 = 0, level2 = 0, level3 = 0, special = 0;
-                for (ExpertProject expertProject : project.getExperts()) {
-                    special += expertProject.getSpecialNum();
-                    level1 += expertProject.getFirstNum();
-                    level2 += expertProject.getSecondNum();
-                    level3 += expertProject.getThirdNum();
-                }
-
-                if (ConfigService.prize == Prize.SPECIAL) {
-                    project.setSpecialNum(special);
-                    if (judgePrizeService.isSpecial(special))
-                        project.setPrize("特等奖");
-                    else project.setPrize("一等奖");
-                } else if (ConfigService.prize == Prize.FIRST) {
-                    if (judgePrizeService.isFirst(0, level1))
-                        project.setPrize("一等奖");
-                    else project.setPrize("二等奖");
-                    project.setFirstNum(level1);
-                } else if (ConfigService.prize == Prize.SECOND) {
-                    if (judgePrizeService.isSecond(0, 0, level2))
-                        project.setPrize("二等奖");
-                    else project.setPrize("三等奖");
-                    project.setSecondNum(level2);
-                } else if (ConfigService.prize == Prize.THIRD) {
-                    if (judgePrizeService.isThird(0, 0, 0, level3))
-                        project.setPrize("三等奖");
-                    else project.setPrize("无");
-                    project.setThirdNum(level3);
-                } else {
-                    project.setSpecialNum(special);
-                    project.setFirstNum(level1);
-                    project.setSecondNum(level2);
-                    project.setThirdNum(level3);
-                    if (judgePrizeService.isSpecial(special)) project.setPrize("特等奖");
-                    else if (judgePrizeService.isFirst(special, level1)) project.setPrize("一等奖");
-                    else if (judgePrizeService.isSecond(special, level1, level2)) project.setPrize("二等奖");
-                    else if (judgePrizeService.isThird(special, level1, level2, level3)) project.setPrize("三等奖");
-                    else project.setPrize("无");
-                }
-            }
-            projectRepository.saveAll(projects);
+            finishVote();
         }
+    }
+
+    @Transactional
+    public void finishVote() {
+        List<Project> projects = projectRepository.queryByPublish();
+        for (Project project : projects) {
+            int level1 = 0, level2 = 0, level3 = 0, special = 0;
+            for (ExpertProject expertProject : project.getExperts()) {
+                special += expertProject.getSpecialNum();
+                level1 += expertProject.getFirstNum();
+                level2 += expertProject.getSecondNum();
+                level3 += expertProject.getThirdNum();
+            }
+
+            if (ConfigService.prize == Prize.SPECIAL) {
+                project.setSpecialNum(special);
+                if (judgePrizeService.isSpecial(special))
+                    project.setPrize("特等奖");
+                else project.setPrize("一等奖");
+            } else if (ConfigService.prize == Prize.FIRST) {
+                if (judgePrizeService.isFirst(0, level1))
+                    project.setPrize("一等奖");
+                else project.setPrize("二等奖");
+                project.setFirstNum(level1);
+            } else if (ConfigService.prize == Prize.SECOND) {
+                if (judgePrizeService.isSecond(0, 0, level2))
+                    project.setPrize("二等奖");
+                else project.setPrize("三等奖");
+                project.setSecondNum(level2);
+            } else if (ConfigService.prize == Prize.THIRD) {
+                if (judgePrizeService.isThird(0, 0, 0, level3))
+                    project.setPrize("三等奖");
+                else project.setPrize("无");
+                project.setThirdNum(level3);
+            } else {
+                project.setSpecialNum(special);
+                project.setFirstNum(level1);
+                project.setSecondNum(level2);
+                project.setThirdNum(level3);
+                if (judgePrizeService.isSpecial(special)) project.setPrize("特等奖");
+                else if (judgePrizeService.isFirst(special, level1)) project.setPrize("一等奖");
+                else if (judgePrizeService.isSecond(special, level1, level2)) project.setPrize("二等奖");
+                else if (judgePrizeService.isThird(special, level1, level2, level3)) project.setPrize("三等奖");
+                else project.setPrize("无");
+            }
+        }
+        projectRepository.saveAll(projects);
     }
 
     @Transactional

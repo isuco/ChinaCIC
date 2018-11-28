@@ -29,7 +29,7 @@ public class IndexService {
     public List<Project> getAllProjects() {
         List<Project> projects = projectRepository.findAll();
         for (Project project : projects) {
-            project.setName(project.getNumber() + " " + project.getName());
+            project.setName(project.getProjectPath());
         }
         return projects;
     }

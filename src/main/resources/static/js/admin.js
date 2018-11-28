@@ -32,10 +32,10 @@ $(function () {
             dataType: 'json',
             success: (result) => {
                 console.log(result);
-                if(result['code']==='FAILURE'){
+                if (result['code'] === 'FAILURE') {
                     toastr.options.timeout = 2000;
                     toastr.error(result['reason']);
-                }else {
+                } else {
                     content = result['content'];
                     projectsUl.empty();
                     for (let i = 0; i < content.length; ++i) {
@@ -58,8 +58,8 @@ $(function () {
             let projectId = $(this).attr('id');
             let isPublish = $(this).is(':checked');
             let project = {};
-            project['projectId']=projectId;
-            project['publish']=isPublish;
+            project['projectId'] = projectId;
+            project['publish'] = isPublish;
             publishProjects.push(project);
         });
         console.log(publishProjects);
@@ -87,7 +87,7 @@ $(function () {
     $('#start-special').click(function () {
         startVote('特等奖');
     });
-    
+
     $('#start-first').click(function () {
         startVote('一等奖');
     });
@@ -95,7 +95,7 @@ $(function () {
     $('#start-second').click(function () {
         startVote('二等奖');
     });
-    
+
     $('#start-third').click(function () {
         startVote('三等奖');
     });
@@ -103,19 +103,37 @@ $(function () {
     $('#start-all').click(function () {
         startVote('初评');
     });
-    
+
+    $('#final-watch').click(function () {
+        console.log("查看最终结果");
+        $.ajax({
+            url: '/admin/final-watch',
+            type: 'POST',
+            dataType: 'json',
+            success: (result) => {
+                toastr.options.timeout = 2000;
+                if (result['code'] !== 'FAILURE') {
+                    toastr.info(result['reason']);
+                }
+                else {
+                    toastr.error(result['reason']);
+                }
+            }
+        });
+    });
+
     $('#init-btn').click(function () {
         console.log("ini");
         var dirPath = $('#dirPathInput').val();
-        if(dirPath===undefined||dirPath.length===0){
-            toastr.options.timeout=1000;
+        if (dirPath === undefined || dirPath.length === 0) {
+            toastr.options.timeout = 1000;
             toastr.error("请填写文件夹路径");
-        }else{
+        } else {
             $.ajax({
                 url: '/admin/project/ini',
                 type: 'POST',
                 dataType: 'json',
-                data: {'dirPath':dirPath},
+                data: {'dirPath': dirPath},
                 success: (result) => {
                     toastr.options.timeout = 2000;
                     if (result['code'] !== 'FAILURE') {
@@ -134,7 +152,7 @@ $(function () {
             url: '/admin/vote',
             type: 'POST',
             dataType: 'json',
-            data: {'type':prizeType},
+            data: {'type': prizeType},
             success: (result) => {
                 toastr.options.timeout = 2000;
                 if (result['code'] !== 'FAILURE') {
