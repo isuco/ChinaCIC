@@ -60,7 +60,7 @@ public class AdminController {
             resMap.put("error", "请填写密码");
             return "login";
         } else if (!adminPassword.equals(password)) {
-            resMap.put("error", "密码不正确");
+            resMap.put("error", "密码不正确, 请使用" + adminPassword + "登陆");
             return "login";
         } else {
             session.setAttribute("adminLogin", true);
@@ -71,16 +71,17 @@ public class AdminController {
     @PostMapping("vote")
     @ResponseBody
     public CommonResult startVote(@RequestParam String type) {
+        log.info("尝试开启{}奖项投票", type);
         if (StringUtils.isEmpty(type)) {
             return CommonResult.failure("开启的投票奖项不能为空");
         } else {
             ConfigService.finalWatch = false;
             boolean isSuccess = adminService.startVote(type);
             if (isSuccess) {
-                log.info("开启投票{}成功", type);
+                log.info("开启{}奖项投票成功", type);
                 return CommonResult.success("开启" + type + "投票成功");
             } else {
-                log.error("开启投票{}失败", type);
+                log.error("开启{}奖项投票失败", type);
                 return CommonResult.failure("开启" + type + "投票失败");
             }
         }
@@ -89,6 +90,7 @@ public class AdminController {
     @PostMapping("final-watch")
     @ResponseBody
     public CommonResult finalWatch() {
+        log.info("开启终评最终结果查看");
         ConfigService.finalWatch = true;
         return CommonResult.success("success");
     }
@@ -96,6 +98,7 @@ public class AdminController {
     @PostMapping("project/ini")
     @ResponseBody
     public CommonResult parseProject(@RequestParam String dirPath) {
+        log.info("使用 {} 目录下的文件进行初始化", dirPath);
         if (StringUtils.isEmpty(dirPath)) {
             return CommonResult.failure("请填写文件路径");
         }

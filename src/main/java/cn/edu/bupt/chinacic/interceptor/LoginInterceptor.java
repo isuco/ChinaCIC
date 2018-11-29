@@ -9,6 +9,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Slf4j
 @Component
@@ -28,11 +29,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 if (adminLogin) {
                     return true;
                 } else {
+                    log.warn("需要管理员权限，已重定向到管理员登录页面");
                     response.sendRedirect("/admin/login");
                     return false;
                 }
             }
             if (indexService.needRegistry(NetworkUtils.getIpAddr(request))) {
+                log.warn("需要专家权限，已重定向到专家登录页面");
                 response.sendRedirect("/user/registry");
                 return false;
             } else {

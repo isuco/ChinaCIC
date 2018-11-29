@@ -167,6 +167,7 @@ public class AdminService {
         }
         project.setType(type);
         project.setPrize("无");
+        log.info("项目 {} 解析完成", filePath);
         return project;
 //        project.setType(ConfigService.types.get(number.charAt(0)));
 //        return projectRepository.save(project);

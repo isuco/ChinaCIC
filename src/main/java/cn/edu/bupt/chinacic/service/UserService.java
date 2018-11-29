@@ -158,6 +158,7 @@ public class UserService {
         expert.setVoted(true);
         expertRepository.save(expert);
 
+        // 获取该专家需要打印的数据
         List<Project> projects = projectRepository.queryByPublish();
         List<ExpertProject> printExpertProjects = projects.stream().map(p -> {
             ExpertProjectPrimaryKey key = new ExpertProjectPrimaryKey(expert.getId(), p.getId());

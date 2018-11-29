@@ -7,6 +7,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +29,7 @@ public class PrintService {
         calendar = Calendar.getInstance();
     }
 
+    @Async
     public void printVotePerExpert(List<ExpertProject> votesOfExpert, Expert expert, String filePath) {
         Document document;
         try {
@@ -109,6 +111,7 @@ public class PrintService {
         } catch (DocumentException e) {
             log.error("{}专家表格生成失败", expert.getName());
         }
+        log.info("{}专家投票文件生成成功，文件位置：{}", expert.getName(), filePath);
         document.close();
     }
 

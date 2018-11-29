@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping("registry")
-    public String userRegistry(HttpServletRequest request, @RequestParam String name, ModelMap resMap) {
+    public String userRegistry(HttpServletRequest request, @RequestParam String name, HttpSession session, ModelMap resMap) {
         String ip = NetworkUtils.getIpAddr(request);
         if (StringUtils.isEmpty(ip) || StringUtils.isEmpty(name)) {
             resMap.put("error", "注册信息不完整");
@@ -93,9 +94,6 @@ public class UserController {
     @ResponseBody
     public CommonResult expertVote(HttpServletRequest request, @RequestBody List<ExpertVoteJo> expertVotes) {
         String ip = NetworkUtils.getIpAddr(request);
-        if (StringUtils.isEmpty(ip) || indexService.needRegistry(ip)) {
-            return CommonResult.failure("请先注册");
-        }
         if (userService.isVoted(ip)) {
             return CommonResult.failure("不能重复投票");
         }
