@@ -43,7 +43,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project : ${projects}" th:class="">
+        <tr th:each="project : ${projects}">
             <td style="font-size: 28px;" class="docindex" th:text="${project.number}"></td>
             <td class="levelOneScore" style="font-size:28px;font-weight: bold" th:text="${project.specialNum}"></td>
             <td class="levelOneScore" style="font-size:28px;font-weight:bold;" th:text="${project.firstNum}"></td>

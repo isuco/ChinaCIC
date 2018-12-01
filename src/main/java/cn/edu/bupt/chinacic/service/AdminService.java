@@ -7,6 +7,7 @@ import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.NumNameRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
+import cn.edu.bupt.chinacic.util.FileUtils;
 import cn.edu.bupt.chinacic.util.Prize;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.multipdf.Splitter;
@@ -139,7 +140,7 @@ public class AdminService {
                 }
                 String[] split = childFile.getName().split(" ");
 
-                projects.add(generateProject(split[0], split[1].substring(0, split[1].lastIndexOf(".")),
+                projects.add(generateProject(split[0], FileUtils.getFileNameNoExtension(split[1]),
                         mainRecUnit, mainComUnit, childFile.getName()));
 //                if (project == null) {
 //                    log.error("项目{}持久化失败", childFile.getName());
@@ -152,7 +153,7 @@ public class AdminService {
         return true;
     }
 
-    public Project generateProject(String number, String name, String mainRecUnit, String mainComUnit, String filePath) {
+    private Project generateProject(String number, String name, String mainRecUnit, String mainComUnit, String filePath) {
         Project project = new Project();
         project.setNumber(number);
         project.setName(name);
@@ -160,7 +161,7 @@ public class AdminService {
         project.setRecoUnit(mainRecUnit);
         project.setPublish(false);
         project.setProjectPath(filePath);
-        Optional<NumToName> numToName = this.numNameRepository.queryByNum(String.valueOf(number.charAt(0)));
+        Optional<NumToName> numToName = this.numNameRepository.queryByNum(String.valueOf(number.substring(0, 2)));
         String type = null;
         if (numToName.isPresent()) {
             type = numToName.get().getName();
@@ -214,6 +215,7 @@ public class AdminService {
                     projectVo.setId(p.getId());
                     projectVo.setName(p.getNumber() + " " + p.getName());
                     projectVo.setPublish(p.isPublish());
+                    projectVo.setPrize(p.getPrize());
                     return projectVo;
                 })
                 .collect(Collectors.toList());

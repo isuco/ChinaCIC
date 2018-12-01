@@ -1,7 +1,11 @@
 $(function () {
 
-    var publishBtn = $("#submit-publish-btn");
-    var projectsUl = $('#projects-ul');
+    let publishBtn = $("#submit-publish-btn");
+    let projectsUl = $('#projects-ul');
+    let selectFirstBtn = $('#select-first-btn');
+    let selectSecondBtn = $("#select-second-btn");
+    let selectThirdBtn = $('#select-third-btn');
+    let content;
 
     toastr.options = {
         "closeButton": false,
@@ -40,15 +44,18 @@ $(function () {
                     projectsUl.empty();
                     for (let i = 0; i < content.length; ++i) {
                         if (content[i].isPublish) {
-                            projectsUl.append(`<input type="checkbox" checked id="${content[i].id}">${content[i].name}</input><br>`)
+                            projectsUl.append(`<input type="checkbox" checked id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
                         } else {
-                            projectsUl.append(`<input type="checkbox" id="${content[i].id}">${content[i].name}</input><br>`)
+                            projectsUl.append(`<input type="checkbox" id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
                         }
                     }
                 }
             }
         });
     }
+
 
     publishBtn.click(function () {
 
@@ -82,6 +89,45 @@ $(function () {
                 }
             }
         });
+    });
+
+    selectFirstBtn.click(function () {
+        projectsUl.empty();
+        for (let i = 0; i < content.length; ++i) {
+            if (content[i].prize === '一等奖') {
+                projectsUl.append(`<input type="checkbox" checked id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
+            } else {
+                projectsUl.append(`<input type="checkbox" id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
+            }
+        }
+    });
+
+    selectSecondBtn.click(function () {
+        projectsUl.empty();
+        for (let i = 0; i < content.length; ++i) {
+            if (content[i].prize === '二等奖') {
+                projectsUl.append(`<input type="checkbox" checked id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
+            } else {
+                projectsUl.append(`<input type="checkbox" id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
+            }
+        }
+    });
+
+    selectThirdBtn.click(function () {
+        projectsUl.empty();
+        for (let i = 0; i < content.length; ++i) {
+            if (content[i].prize === '三等奖') {
+                projectsUl.append(`<input type="checkbox" checked id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
+            } else {
+                projectsUl.append(`<input type="checkbox" id="${content[i].id}" style="margin-top: 8px"/>
+                                    &nbsp;&nbsp;&nbsp;${content[i].prize}&nbsp;&nbsp;&nbsp;&nbsp;${content[i].name}<br>`)
+            }
+        }
     });
 
     $('#start-special').click(function () {

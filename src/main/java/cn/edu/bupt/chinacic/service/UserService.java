@@ -103,12 +103,12 @@ public class UserService {
             vo.setProjectName(project.getNumber() + " " + project.getName());
             vo.setCompUnit(project.getMainCompUnit());
             vo.setType(project.getType());
-            if (!expert.isVoted()) {
-                vo.setVoted(false);
-                vo.setPrize("无");
-                vos.add(vo);
-                continue;
-            }
+//            if (!expert.isVoted()) {
+//                vo.setVoted(false);
+//                vo.setPrize("无");
+//                vos.add(vo);
+//                continue;
+//            }
             Optional<ExpertProject> expertProjectOptional = expertProjectRepository.findById(new ExpertProjectPrimaryKey(expertId, project.getId()));
             if (expertProjectOptional.isPresent()) {
                 ExpertProject expertProject = expertProjectOptional.get();
