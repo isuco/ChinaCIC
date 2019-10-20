@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <title>发布项目</title>
+
+    <link th:href="@{/css/bootstrap.css}" rel="stylesheet">
+    <link th:href="@{/css/operation.css}" rel="stylesheet">
+    <link th:href="@{/css/toastr.min.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">发布项目</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">china-cic</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/admin/operation-publish">发布项目</a></li>
+                <li class="active"><a href="/admin/operation-start">开启投票</a></li>
+                <li><a href="/admin/vote-result?type=origin">显示投票结果</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="container text-center">
+    <div class="row" style="padding-top: 40px">
+        <button type="button" class="btn btn-primary text-center" id="start-special">开启特等奖投票</button>
+        <button type="button" class="btn btn-primary text-center" id="start-first">开启一等奖投票</button>
+        <button type="button" class="btn btn-primary text-center" id="start-second">开启二等奖投票</button>
+        <button type="button" class="btn btn-primary text-center" id="start-third">开启三等奖投票</button>
+        <button type="button" class="btn btn-primary text-center" id="start-all">开启初评投票</button>
+        <button type="button" class="btn btn-primary text-center" id="final-watch">终评最终结果</button>
+    </div>
+
+    <div class="row" style="padding-top: 40px">
+        <input id="dirPathInput" type="text" class="form-control" placeholder="文件路径" required=""/>
+        <button type="button" class="btn btn-primary" id="init-btn" style="margin-top: 20px">初始化</button>
+    </div>
+</div><!-- /.container -->
+</body>
+
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/toastr.min.js"></script>
+<script src="/js/admin.js"></script>
+</html>

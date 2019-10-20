@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>专家注册</title>
+    <link th:href="@{css/page.css}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-treeview.min.css}" />
+</head>
+
+<body>
+<div class="logo" onclick="window.location.href='/'">
+    <br class="clear"/>
+    <h1 class="logo_text">
+        中国通信学会科学技术奖评审工作系统
+    </h1>
+</div>
+<div class="line"></div>
+
+<div class="left_bar">
+    <div id="tree" style="overflow-y:auto;overflow-x:auto;width:100%;height:80%; "></div>
+
+    <div style="height:20%; background-color:#E5ECF9;padding-top:50px;text-align:center">
+        <div style="height:30px;font-size:22px">专家请投票</div>
+        <a class="btn btn-primary text-center" href="/user/vote" style="width:80px;margin-top:20px;">进入</a>
+    </div>
+</div>
+<object id="pdf_viewer" data="/pdf" type="application/pdf" class="right_bar">
+
+</object>
+
+<div style="text-align:center; margin-top:25px;color:#747576; font-size:16px;" class="navbar-fixed-bottom">
+    <script type="text/javascript">
+        var today = new Date(); //新建一个Date对象
+        var year = today.getFullYear();//查询年份
+        document.write("中国人工智能学会 @"+year + "Power by BUPT");
+    </script>
+</div>
+</body>
+
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/bootstrap-treeview.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+</html>

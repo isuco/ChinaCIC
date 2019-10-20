@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>投票结果</title>
+    <link th:href="@{/css/page.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+</head>
+
+<body>
+
+<script type="text/javascript">
+    var today = new Date(); //新建一个Date对象
+    var year = today.getFullYear();//查询年份
+
+    document.write("<h2 class='print_head'>" + year + "年中国通信学会科学技术奖评审工作系统" + "</h2>");
+</script>
+
+<div id="vote_bar1" th:if="${numberOfWaiting == 0}" class="container table-responsive text-center" style="margin-top: 30px">
+    <table>
+        <thead class="tbtrTitle">
+        <tr style="font-size: 15px">
+            <td style="width: 5%;">编号</td>
+            <td style="width: 7%;">特等奖</td>
+            <td style="width: 7%;">一等奖</td>
+            <td style="width: 7%;">二等奖</td>
+            <td style="width: 7%;">三等奖</td>
+            <td style="width: 13%;">项目类别</td>
+            <td style="width: 30%;">项目名称</td>
+            <td>提名单位</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="project:${projects}">
+            <td style="font-size: 13px;" class="docindex" th:text="${project.number}"></td>
+            <td class="levelOneScore" style="font-size:15px;" th:text="${project.specialNum}"></td>
+            <td class="levelOneScore" style="font-size:15px;" th:text="${project.firstNum}"></td>
+            <td class="levelTwoScore" style="font-size:15px;" th:text="${project.secondNum}"></td>
+            <td class="levelThreeScore" style="font-size:15px;" th:text="${project.thirdNum}"></td>
+            <td class="levelThreeScore" style="font-size:15px;" th:text="${project.type}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.name}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.recoUnit}"></td>
+        </tr>
+
+        <!--<tr>-->
+            <!--<td style="font-size:28px;">总计</td>-->
+            <!--<td class="levelOneScore" style="font-size:15px;" th:text="${totalOfSpecial}">"</td>-->
+            <!--<td class="levelOneScore" style="font-size:15px" th:text="${totalOfFirst}">"</td>-->
+            <!--<td class="levelTwoScore" style="font-size:15px" th:text="${totalOfSecond}"></td>-->
+            <!--<td class="levelThreeScore" style="font-size:15px" th:text="${totalOfThird}"></td>-->
+            <!--<td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>-->
+            <!--<td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>-->
+            <!--<td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>-->
+        <!--</tr>-->
+        </tbody>
+    </table>
+</div>
+<!--<div class="text-center">-->
+    <!--<p style="font-size:15px"><a href="admin?page=rank">主任委员签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></p>-->
+<!--</div>-->
+
+<script src="/js/jquery-3.3.1.js"></script>
+</body>
+</html>
