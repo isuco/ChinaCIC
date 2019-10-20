@@ -4,6 +4,7 @@ import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
 import cn.edu.bupt.chinacic.pojo.po.NumToName;
 import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
+import cn.edu.bupt.chinacic.repository.ExpertProjectRepository;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
 import cn.edu.bupt.chinacic.repository.NumNameRepository;
 import cn.edu.bupt.chinacic.repository.ProjectRepository;
@@ -17,8 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import sun.security.krb5.Config;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,10 +34,16 @@ public class AdminService {
     private ProjectRepository projectRepository;
     private ExpertRepository expertRepository;
     private NumNameRepository numNameRepository;
+    private ExpertProjectRepository expertprojectRepository;
 
     @Autowired
     public void setProjectRepository(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
+    }
+
+    @Autowired
+    public void setExpertProjectRepository(ExpertProjectRepository projectRepository) {
+        this.expertprojectRepository = projectRepository;
     }
 
     @Autowired
@@ -49,35 +59,48 @@ public class AdminService {
     @Transactional
     public synchronized boolean startVote(String type) {
         ConfigService.voteItems.clear();
+        List<Project> projects =null;
         switch (type) {
             case "特等奖":
                 ConfigService.prize = Prize.SPECIAL;
                 ConfigService.voteItems.add("特等奖");
+                projects=projectRepository.querySpecial();
                 break;
             case "一等奖":
                 ConfigService.prize = Prize.FIRST;
                 ConfigService.voteItems.add("一等奖");
+                projects=projectRepository.queryFirst();
                 break;
             case "二等奖":
                 ConfigService.prize = Prize.SECOND;
                 ConfigService.voteItems.add("二等奖");
+                projects=projectRepository.querySecond();
                 break;
             case "三等奖":
                 ConfigService.prize = Prize.THIRD;
                 ConfigService.voteItems.add("三等奖");
+                projects=projectRepository.queryThird();
                 break;
             default:
                 ConfigService.prize = Prize.ALL;
                 ConfigService.voteItems.add("一等奖");
                 ConfigService.voteItems.add("二等奖");
                 ConfigService.voteItems.add("三等奖");
+                projects=projectRepository.queryByPublish();
         }
-//        ConfigService.voteItems.add("无");
+        ConfigService.voteItems.add("无");
         expertRepository.updateUnVoted();
-        List<Project> projects = projectRepository.queryByPublish();
         projects.forEach(p -> p.getExperts().forEach(pp -> pp.setVoted(false)));
+        projects.forEach(p-> p.setPublish(true));
         projectRepository.saveAll(projects);
 //        expertRepository.updateUnVoted();
+        return true;
+    }
+
+    public boolean clearDatabase(){
+        expertprojectRepository.clear();
+        expertRepository.clear();
+        projectRepository.clear();
         return true;
     }
 
@@ -88,7 +111,6 @@ public class AdminService {
             return false;
         }
         File[] childFiles = dirFile.listFiles(childFile -> childFile.isFile() && childFile.getName().endsWith(".pdf"));
-
         PDFTextStripper stripper;
         try {
             stripper = new PDFTextStripper();
@@ -153,22 +175,20 @@ public class AdminService {
         return true;
     }
 
-    private Project generateProject(String number, String name, String mainRecUnit, String mainComUnit, String filePath) {
+    private Project generateProject(String number, String name, String mainRecUnit, String mainComUnit, String type) {
         Project project = new Project();
+        project.setType(type);
         project.setNumber(number);
         project.setName(name);
         project.setMainCompUnit(mainComUnit);
         project.setRecoUnit(mainRecUnit);
         project.setPublish(false);
-        project.setProjectPath(filePath);
-        Optional<NumToName> numToName = this.numNameRepository.queryByNum(String.valueOf(number.substring(0, 2)));
-        String type = null;
-        if (numToName.isPresent()) {
+       // Optional<NumToName> numToName = this.numNameRepository.queryByNum(String.valueOf(number.substring(0, 2)));
+        /*if (numToName.isPresent()) {
             type = numToName.get().getName();
-        }
-        project.setType(type);
+        }*/
         project.setPrize("无");
-        log.info("项目 {} 解析完成", filePath);
+        //log.info("项目 {} 解析完成", filePath);
         return project;
 //        project.setType(ConfigService.types.get(number.charAt(0)));
 //        return projectRepository.save(project);
@@ -253,6 +273,26 @@ public class AdminService {
                     }
                     return target;
                 }).collect(Collectors.toList());
+    }
+
+    public boolean readCSV(String path){
+        ArrayList<Project> projects=new ArrayList<Project>();
+        File inFile = new File(path);
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(inFile));
+            reader.readLine();
+            while (reader.ready()) {
+                String line = reader.readLine();
+                String[] columns=line.split(",");
+                projects.add(generateProject(columns[1], columns[2],columns[3],columns[4],columns[0]));
+            }
+            reader.close();
+            projectRepository.saveAll(projects);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+    }
+    return true;
     }
 
     public List<Project> getRankResult() {

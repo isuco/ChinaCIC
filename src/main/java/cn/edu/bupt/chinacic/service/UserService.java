@@ -229,6 +229,7 @@ public class UserService {
                 else project.setPrize("无");
             }
         }
+        projects.forEach(p-> p.setPublish(false));
         projectRepository.saveAll(projects);
     }
 

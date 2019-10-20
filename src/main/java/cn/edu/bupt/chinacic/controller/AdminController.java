@@ -97,15 +97,15 @@ public class AdminController {
 
     @PostMapping("project/ini")
     @ResponseBody
-    public CommonResult parseProject(@RequestParam String dirPath) {
-        log.info("使用 {} 目录下的文件进行初始化", dirPath);
-        if (StringUtils.isEmpty(dirPath)) {
+    public CommonResult parseProject(@RequestParam String csvPath) {
+        log.info("使用 {} 文件进行初始化", csvPath);
+        if (StringUtils.isEmpty(csvPath)) {
             return CommonResult.failure("请填写文件路径");
         }
-        if (adminService.parseProject(dirPath)) {
-            return CommonResult.failure("参评项目初始化成功");
-        } else {
+        if (adminService.clearDatabase()&&adminService.readCSV(csvPath)) {
             return CommonResult.success("参评项目初始化成功");
+        } else {
+            return CommonResult.failure("初始化失败");
         }
     }
 

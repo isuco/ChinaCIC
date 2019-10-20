@@ -1,5 +1,6 @@
 package cn.edu.bupt.chinacic.service;
 
+import cn.edu.bupt.chinacic.pojo.po.Project;
 import cn.edu.bupt.chinacic.util.Prize;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class ConfigService {
 
     public static Prize prize = null;
     public static boolean finalWatch = false;
+
 
 //    @PostConstruct
 //    public void init() {

@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableAsync
 public class ChinaCicApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ChinaCicApplication.class, args);
 	}
