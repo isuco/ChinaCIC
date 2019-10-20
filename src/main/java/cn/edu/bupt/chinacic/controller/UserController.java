@@ -82,7 +82,11 @@ public class UserController {
                 resMap.addAttribute("error", "没有参与投票的项目");
             } else {
                 resMap.addAttribute("voteData", vos);
-                resMap.addAttribute("prizes", ConfigService.voteItems);
+                if (ConfigService.voteItems.size() == 0){
+                    resMap.addAttribute("error", "没有开启投票");
+                }else{
+                    resMap.addAttribute("prizes", ConfigService.voteItems);
+                }
             }
         } else {
             resMap.addAttribute("error", "没有投票资格");

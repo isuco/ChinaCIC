@@ -72,7 +72,7 @@ public class AdminService {
                 ConfigService.voteItems.add("二等奖");
                 ConfigService.voteItems.add("三等奖");
         }
-        ConfigService.voteItems.add("无");
+//        ConfigService.voteItems.add("无");
         expertRepository.updateUnVoted();
         List<Project> projects = projectRepository.queryByPublish();
         projects.forEach(p -> p.getExperts().forEach(pp -> pp.setVoted(false)));

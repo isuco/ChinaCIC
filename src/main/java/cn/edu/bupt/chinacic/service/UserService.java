@@ -205,7 +205,7 @@ public class UserService {
             } else if (ConfigService.prize == Prize.FIRST) {
                 if (judgePrizeService.isFirst(0, level1))
                     project.setPrize("一等奖");
-                else project.setPrize("二等奖");
+//                else project.setPrize("二等奖");
                 project.setFirstNum(level1);
             } else if (ConfigService.prize == Prize.SECOND) {
                 if (judgePrizeService.isSecond(0, 0, level2))
