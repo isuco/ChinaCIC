@@ -101,7 +101,8 @@
                 data: JSON.stringify(projects),
                 success: (result) => {
                     if (result['code'] === 'SUCCESS') {
-                        toastr.info(result['reason']);
+                        // toastr.info(result['reason']);
+                        window.location.reload();
                     } else {
                         toastr.error(result['reason']);
                     }

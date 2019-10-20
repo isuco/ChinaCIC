@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>专家投票</title>
+    <link rel="stylesheet" th:href="@{/css/page.css}">
+    <link rel="stylesheet" th:href="@{/css/vote.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/toastr.min.css}">
+</head>
+<body>
+<div class="logo" onclick="window.location.href='/'">
+    <br class="clear"/>
+    <h1 class="logo_text">
+        中国通信学会科学技术奖评审工作系统
+    </h1>
+</div>
+<div class="line"></div>
+
+<div class="container-fluid table-responsive text-center" style="margin-top: 40px">
+    <p class="info-head">当前正在进行 一等奖 投票， 请在您同意获奖的项目上选择对勾</p>
+    <img src="/img/voteSuccess.png" height="240" width="240"/>
+    <p class="info">您已完成投票</p>
+
+    <button id="refresh" class="btn btn-primary" type="button" style="width: 100px;margin-bottom: 20px;">刷新</button>
+</div>
+
+</body>
+
+<script src="/js/jquery-3.3.1.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/confirm-dialog.js"></script>
+<script>
+
+    $('#refresh').on('click', function(){
+        window.location.reload();
+    });
+
+
+</script>
+</html>

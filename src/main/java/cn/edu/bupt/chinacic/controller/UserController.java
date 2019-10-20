@@ -75,22 +75,33 @@ public class UserController {
     @GetMapping("vote")
     public String getVoteView(HttpServletRequest request, ModelMap resMap) {
         String ip = NetworkUtils.getIpAddr(request);
-        if (!StringUtils.isEmpty(ip) || !indexService.needRegistry(ip)) {
-            List<VoteItemVo> vos = userService.getVoteData(ip);
-            System.out.println(vos.size());
-            if (vos.size() == 0) {
-                resMap.addAttribute("error", "没有参与投票的项目");
-            } else {
-                resMap.addAttribute("voteData", vos);
-                if (ConfigService.voteItems.size() == 0){
-                    resMap.addAttribute("error", "没有开启投票");
-                }else{
-                    resMap.addAttribute("prizes", ConfigService.voteItems);
-                }
-            }
-        } else {
-            resMap.addAttribute("error", "没有投票资格");
+        // 投票奖项
+        List<String> voteItems = ConfigService.voteItems;
+        if (voteItems.size() == 0){
+            resMap.addAttribute("error", "没有开启投票");
+            return "vote-error";
         }
+        resMap.addAttribute("prizes", voteItems);
+
+        // 已经投票过
+        if(userService.isVoted(ip)){
+            return "vote-success";
+        }
+
+        // 没有投票资格
+        if (StringUtils.isEmpty(ip) || indexService.needRegistry(ip)){
+            resMap.addAttribute("error", "没有投票资格");
+            return "vote-error";
+        }
+
+        // 获取投票项目
+        List<VoteItemVo> vos = userService.getVoteData(ip);
+        if (vos.size() == 0){
+            resMap.addAttribute("error", "没有参与投票的项目");
+            return "vote-error";
+        }
+        resMap.addAttribute("voteData", vos);
+
         return "expert-vote";
     }
 
