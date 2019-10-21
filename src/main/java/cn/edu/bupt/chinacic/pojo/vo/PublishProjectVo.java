@@ -13,6 +13,8 @@ public class PublishProjectVo {
     public String name;
     public boolean isPublish;
     public String prize;
+    public String type;
+    public String number;
 
     public PublishProjectVo(Project project) {
         BeanUtils.copyProperties(project, this);

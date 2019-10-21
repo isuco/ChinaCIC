@@ -36,7 +36,7 @@
 
 <div class="container text-center">
 
-    <div style="margin-top: 30px">
+    <div style="margin: 30px 0;">
         <button type="button" class="btn btn-primary text-center" id="submit-publish-btn">发布</button>
         <button type="button" class="btn btn-primary text-center" id="select-special-btn">选择一等奖</button>
         <button type="button" class="btn btn-primary text-center" id="select-first-btn">选择提名一等奖</button>
@@ -44,8 +44,43 @@
         <button type="button" class="btn btn-primary text-center" id="select-third-btn">选择提名三等奖</button>
     </div>
 
-    <div class="starter-template text-left" id="projects-div">
-        <ul class="list-group" id="projects-ul"></ul>
+    <!-- 项目列表 -->
+    <div class="container table-responsive" id="projects-div">
+        <p class="alert-danger" th:if="${error}" th:text="${error}">错误!</p>
+        <table class="table text-center table-striped table-bordered" th:if="!${error}">
+            <thead class="text-center">
+                <tr>
+                    <th class="text-center">选择</th>
+                    <th class="text-center">收序</th>
+                    <th class="text-center">项目名称</th>
+                    <th class="text-center">提名等级</th>
+                    <th class="text-center">获奖等级</th>
+                    <th class="text-center">发布状态</th>
+                </tr>
+            </thead>
+
+            <tbody id="content">
+                <tr th:each="p : ${projects}">
+                    <!-- 选择 -->
+                    <td> <input type="checkbox" th:id="${p.id}" th:checked="${p.isPublish}" th:data-prize="${p.prize}" th:data-prizeWant="${p.type}"/> </td>
+                    <!-- 收序 -->
+                    <td><p th:text="${p.number}"></p> </td>
+                    <!-- 项目名称 -->
+                    <td><p th:text="${p.name}"></p> </td>
+                    <!-- 提名等级 -->
+                    <td><p th:text="${p.type}"></p> </td>
+                    <!-- 获奖等级 -->
+                    <td><p th:text="${p.prize}"></p> </td>
+                    <!-- 发布状态 -->
+                    <td th:switch="${p.isPublish}">
+                        <p th:case="true" class="alert-success">发布中</p>
+                        <p th:case="false" >未发布</p>
+                        <p th:case="*"></p>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 </div><!-- /.container -->
@@ -55,4 +90,5 @@
 <script src="/js/bootstrap.js"></script>
 <script src="/js/toastr.min.js"></script>
 <script src="/js/admin.js"></script>
+<script th:src="@{/js/operation-publish.js}"></script>
 </html>

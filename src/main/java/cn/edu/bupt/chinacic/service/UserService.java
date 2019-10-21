@@ -142,10 +142,14 @@ public class UserService {
 
     @Transactional
     public void expertVote(String ip, List<ExpertVoteJo> expertVotes) {
+        // 得到专家
         Expert expert = expertRepository.queryByIp(ip);
         for (ExpertVoteJo expertVote : expertVotes) {
+            // 专家,项目 联合主键
             ExpertProjectPrimaryKey key = new ExpertProjectPrimaryKey(expert.getId(), expertVote.getProjectId());
+            // 获得关系数据
             Optional<ExpertProject> expertProjectOptional = expertProjectRepository.findById(key);
+
             ExpertProject expertProject = expertProjectOptional.orElseGet(() -> {
                 ExpertProject e = new ExpertProject();
                 e.setId(key);
@@ -231,7 +235,7 @@ public class UserService {
             }
         }
         // TODO Q4
-        projects.forEach(p-> p.setPublish(false));
+//        projects.forEach(p-> p.setPublish(false));
         projectRepository.saveAll(projects);
     }
 

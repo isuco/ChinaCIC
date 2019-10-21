@@ -59,27 +59,27 @@ public class AdminService {
     @Transactional
     public synchronized boolean startVote(String type) {
         ConfigService.voteItems.clear();
-        List<Project> projects =null;
+//        List<Project> projects =null;
         switch (type) {
             case "特等奖":
                 ConfigService.prize = Prize.SPECIAL;
                 ConfigService.voteItems.add("特等奖");
-                projects=projectRepository.querySpecial();
+//                projects=projectRepository.querySpecial();
                 break;
             case "一等奖":
                 ConfigService.prize = Prize.FIRST;
                 ConfigService.voteItems.add("一等奖");
-                projects=projectRepository.queryFirst();
+//                projects=projectRepository.queryFirst();
                 break;
             case "二等奖":
                 ConfigService.prize = Prize.SECOND;
                 ConfigService.voteItems.add("二等奖");
-                projects=projectRepository.querySecond();
+//                projects=projectRepository.querySecond();
                 break;
             case "三等奖":
                 ConfigService.prize = Prize.THIRD;
                 ConfigService.voteItems.add("三等奖");
-                projects=projectRepository.queryThird();
+//                projects=projectRepository.queryThird();
                 break;
             default:
                 ConfigService.prize = Prize.ALL;
@@ -87,13 +87,14 @@ public class AdminService {
                 ConfigService.voteItems.add("二等奖");
                 ConfigService.voteItems.add("三等奖");
                 ConfigService.voteItems.add("无");
-                projects=projectRepository.queryByPublish();
+//                projects=projectRepository.queryByPublish();
         }
         expertRepository.updateUnVoted();
-        // 获取投过票的所有专家, 把 voted 设为 false ?
+        List<Project> projects = projectRepository.queryByPublish();
+        // 获取投过票的所有专家, 把 voted 设为 false ? 不会有问题吗
         projects.forEach(p -> p.getExperts().forEach(pp -> pp.setVoted(false)));
         // 发布所有项目
-        projects.forEach(p-> p.setPublish(true));
+//        projects.forEach(p-> p.setPublish(true));
         // 提交操作
         projectRepository.saveAll(projects);
 
@@ -126,28 +127,6 @@ public class AdminService {
 //        return projectRepository.save(project);
     }
 
-    private String parseOneProject(PDFTextStripper stripper, Splitter splitter, PDDocument document) throws IOException {
-        String content = null;
-        int index = 0;
-        List<PDDocument> childDocuments = null;
-        try {
-            childDocuments = splitter.split(document);
-            do {
-                content = stripper.getText(childDocuments.get(index));
-                if (++index > 5) break;
-            } while (!content.contains("主要完成单位") && index < childDocuments.size());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (childDocuments != null && childDocuments.size() > 0) {
-                for (PDDocument childDocument : childDocuments) {
-                    childDocument.close();
-                }
-            }
-        }
-        return content;
-    }
-
     @Transactional
     public void publishProject(List<PublishProjectJo> publishProjects) {
         for (PublishProjectJo publishProject : publishProjects) {
@@ -165,9 +144,11 @@ public class AdminService {
                 .map(p -> {
                     PublishProjectVo projectVo = new PublishProjectVo();
                     projectVo.setId(p.getId());
+                    projectVo.setNumber(p.getNumber());
                     projectVo.setName(p.getNumber() + " " + p.getName());
                     projectVo.setPublish(p.isPublish());
                     projectVo.setPrize(p.getPrize());
+                    projectVo.setType(p.getType());
                     return projectVo;
                 })
                 .collect(Collectors.toList());

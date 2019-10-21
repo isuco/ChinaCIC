@@ -40,7 +40,14 @@ public class AdminController {
     }
 
     @GetMapping("operation-publish")
-    public String operationPublish() {
+    public String operationPublish(ModelMap resMap) {
+        List<PublishProjectVo> projects = this.adminService.getPublishVos();
+        if (projects == null || projects.size() == 0) {
+            resMap.put("error", "请先初始化项目");
+        }else{
+            resMap.put("projects", projects);
+        }
+
         return "operation-publish";
     }
 
