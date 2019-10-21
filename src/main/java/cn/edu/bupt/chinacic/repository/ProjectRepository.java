@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
+    @Query("from Project p")
+    List<Project> queryAll();
+
     @Query("from Project p where p.isPublish = 1")
     List<Project> queryByPublish();
 

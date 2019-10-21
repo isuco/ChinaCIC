@@ -27,18 +27,22 @@
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
             <td style="width: 14%;">项目类别</td>
+            <td style="...">评审结果</td>
             <td style="width: 30%;">项目名称</td>
             <td>提名单位</td>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project : ${projects}" th:if="${project.prize eq '特等奖'}">
+        <tr th:each="project : ${projects}" th:if="${project.type eq '提名特等'}">
             <td style="font-size:28px" class="docindex" th:text="${project.number}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.specialNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.thirdNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.type}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="levelOneTd"
+                th:text="${project.prize}">
+            </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.name}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.recoUnit}">
@@ -58,18 +62,22 @@
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
             <td style="width: 14%;">项目类别</td>
+            <td style="...">评审结果</td>
             <td style="width: 30%;">项目名称</td>
             <td>提名单位</td>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project:${projects}" th:if="${project.prize eq '一等奖'}">
+        <tr th:each="project:${projects}" th:if="${project.prize eq '一等奖' or project.type eq '提名特等' or project.type eq '提名二等'}">
             <td style="font-size:28px" class="docindex" th:text="${project.number}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.specialNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.thirdNum}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.type}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.prize}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.name}">
             </td>
@@ -90,18 +98,22 @@
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
             <td style="width: 14%;">项目类别</td>
+            <td style="...">评审结果</td>
             <td style="width: 30%;">项目名称</td>
             <td>提名单位</td>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project:${projects}" th:if="${project.prize eq '二等奖'}">
+        <tr th:each="project:${projects}" th:if="${project.type eq '提名二等' }">
             <td style="font-size:28px" class="docindex" th:text="${project.number}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.specialNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.firstNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.thirdNum}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.type}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.prize}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.name}">
             </td>
@@ -122,6 +134,7 @@
             <td style="width: 7%;">一等奖</td>
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
+            <td style="...">评审结果</tdsty>
             <td style="width: 14%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
             <td>提名单位</td>
@@ -135,6 +148,9 @@
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.secondNum}"></td>
             <td style="font-size:28px;font-weight:bold" class="levelOneTd" th:text="${project.thirdNum}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.type}">
+            </td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="docname"
+                th:text="${project.prize}">
             </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.name}">
             </td>

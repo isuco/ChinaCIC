@@ -38,6 +38,7 @@
             <td style="width: 7%;">二等奖</td>
             <td style="width: 7%;">三等奖</td>
             <td style="width: 13%;">项目类别</td>
+            <td style="...">评审结果</td>
             <td style="width: 28%;">项目名称</td>
             <td>提名单位</td>
         </tr>
@@ -50,6 +51,9 @@
             <td class="levelTwoScore" style="font-size:28px;font-weight:bold;" th:text="${project.secondNum}"></td>
             <td class="levelThreeScore" style="font-size:28px;font-weight:bold;" th:text="${project.thirdNum}"></td>
             <td class="levelThreeScore" style="font-size:28px;font-weight:bold;" th:text="${project.type}"></td>
+            <td style="WORD-WRAP: break-word; padding: 0px 8px; font-size:15px" class="levelThreeScore"
+                th:text="${project.prize}">
+            </td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.name}"></td>
             <td style="WORD-WRAP: break-word; padding: 0px 8px;" class="docname" th:text="${project.recoUnit}"></td>
         </tr>

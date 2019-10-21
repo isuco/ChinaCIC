@@ -60,6 +60,8 @@ public class AdminService {
     @Transactional
     public synchronized boolean startVote(String type) {
         ConfigService.voteItems.clear();
+        List<Project> lastVote=projectRepository.queryByPublish();
+        lastVote.forEach(p->p.setPublish(false));
         List<Project> projects =null;
         switch (type) {
             case "特等奖":
@@ -254,7 +256,13 @@ public class AdminService {
 
     @Transactional
     public List<Project> getVoteResult() {
-        return projectRepository.queryByPublish().stream()
+        List<Project> projects=null;
+        if(ConfigService.finalWatch){
+            projects=projectRepository.queryAll();
+        }else{
+            projects=projectRepository.queryByPublish();
+        }
+        return projects.stream()
                 .map(p -> {
                     Project target = new Project(p);
                     if (ConfigService.prize != Prize.ALL) {
@@ -297,7 +305,13 @@ public class AdminService {
     }
 
     public List<Project> getRankResult() {
-        return projectRepository.queryByPublish().stream()
+        List<Project> projects=null;
+        if(ConfigService.finalWatch){
+            projects=projectRepository.queryAll();
+        }else{
+            projects=projectRepository.queryByPublish();
+        }
+        return projects.stream()
                 .map(p -> {
                     Project target = new Project(p);
                     if (ConfigService.prize != Prize.ALL) {
