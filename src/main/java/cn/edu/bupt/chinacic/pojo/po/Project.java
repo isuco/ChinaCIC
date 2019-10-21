@@ -1,5 +1,7 @@
 package cn.edu.bupt.chinacic.pojo.po;
 
+import cn.edu.bupt.chinacic.service.ConfigService;
+import cn.edu.bupt.chinacic.util.Prize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -60,4 +62,15 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ExpertProject> experts = new ArrayList<>();
 
+    public void resetBeforeVote(){
+        if(ConfigService.prize==Prize.SPECIAL){
+            specialNum=0;
+        }else if(ConfigService.prize==Prize.FIRST){
+            firstNum=0;
+        }else if(ConfigService.prize== Prize.SECOND){
+            secondNum=0;
+        }else if(ConfigService.prize== Prize.THIRD){
+            thirdNum=0;
+        }
+    }
 }

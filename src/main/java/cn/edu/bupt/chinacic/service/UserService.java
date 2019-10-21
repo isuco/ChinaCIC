@@ -204,18 +204,16 @@ public class UserService {
                 else project.setPrize("一等奖");
             } else if (ConfigService.prize == Prize.FIRST) {
                 if (judgePrizeService.isFirst(0, level1))
-                    project.setType("提名特等");
-                else project.setType("提名二等");
+                    project.setPrize("提名特等");
+                else project.setPrize("提名二等");
                 project.setFirstNum(level1);
             } else if (ConfigService.prize == Prize.SECOND) {
                 if (judgePrizeService.isSecond(0, 0, level2))
                     project.setPrize("二等奖");
-                else project.setPrize("三等奖");
+                else project.setPrize("提名三等");
                 project.setSecondNum(level2);
             } else if (ConfigService.prize == Prize.THIRD) {
-                if (judgePrizeService.isThird(0, 0, 0, level3))
-                    project.setPrize("三等奖");
-                else project.setPrize("无");
+                project.setPrize("三等奖");
                 project.setThirdNum(level3);
             } else {
                 project.setSpecialNum(special);
@@ -240,12 +238,16 @@ public class UserService {
 
     private void updateVote(ExpertProject expertProject, String prize) {
         expertProject.setVoted(true);
-        if (ConfigService.prize == Prize.ALL) {
+        /*if (ConfigService.prize == Prize.ALL) {
             expertProject.setSpecialNum(0);
             expertProject.setFirstNum(0);
             expertProject.setSecondNum(0);
             expertProject.setThirdNum(0);
-        }
+        }*/
+        expertProject.setSpecialNum(0);
+        expertProject.setFirstNum(0);
+        expertProject.setSecondNum(0);
+        expertProject.setThirdNum(0);
         switch (prize) {
             case "特等奖":
                 expertProject.setSpecialNum(1);

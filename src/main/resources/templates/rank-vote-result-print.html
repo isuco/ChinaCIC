@@ -33,7 +33,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project : ${projects}" th:if="${project.type eq '提名特等'}">
+        <tr th:each="project : ${projects}" th:if="${project.prize eq '提名特等'}">
             <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
@@ -72,7 +72,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project : ${projects}" th:if="${project.type eq '提名特等' or project.type eq '提名二等'}">
+        <tr th:each="project : ${projects}" th:if="${project.type eq '提名一等'">
             <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>
@@ -151,7 +151,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project : ${projects}" th:if="${project.prize eq '三等奖'}">
+        <tr th:each="project : ${projects}" th:if="${project.prize eq '提名三等奖'}">
             <td style="font-size:15px" class="docindex" th:text="${project.number}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.specialNum}"></td>
             <td style="font-size:15px" class="levelOneTd" th:text="${project.firstNum}"></td>

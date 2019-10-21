@@ -16,16 +16,16 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("from Project p where p.isPublish = 1")
     List<Project> queryByPublish();
 
-    @Query("from Project p where p.type='提名特等'")
+    @Query("from Project p where p.prize='提名特等'")
     List<Project> querySpecial();
 
     @Query("from Project p where p.type='提名一等'")
     List<Project> queryFirst();
 
-    @Query("from Project p where p.type='提名二等'")
+    @Query("from Project p where p.type='提名二等'or p.prize='提名二等'")
     List<Project> querySecond();
 
-    @Query("from Project p where p.type='提名莫得'")
+    @Query("from Project p where p.type='提名三等'")
     List<Project> queryThird();
 
     @Transactional
