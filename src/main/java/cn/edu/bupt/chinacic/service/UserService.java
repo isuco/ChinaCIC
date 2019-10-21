@@ -210,7 +210,7 @@ public class UserService {
             } else if (ConfigService.prize == Prize.FIRST) {
                 if (judgePrizeService.isFirst(0, level1))
                     project.setPrize("一等奖");
-//                else project.setPrize("二等奖");
+                else project.setPrize("无");
                 project.setFirstNum(level1);
             } else if (ConfigService.prize == Prize.SECOND) {
                 if (judgePrizeService.isSecond(0, 0, level2))
@@ -234,7 +234,6 @@ public class UserService {
                 else project.setPrize("无");
             }
         }
-        // TODO Q4
 //        projects.forEach(p-> p.setPublish(false));
         projectRepository.saveAll(projects);
     }
@@ -253,6 +252,26 @@ public class UserService {
             expertProject.setSecondNum(0);
             expertProject.setThirdNum(0);
         }
+
+        // 如果是"无"
+        if (prize.equals("无")){
+            switch (ConfigService.prize.type) {
+                case "特等奖":
+                    expertProject.setSpecialNum(0);
+                    break;
+                case "一等奖":
+                    expertProject.setFirstNum(0);
+                    break;
+                case "二等奖":
+                    expertProject.setSecondNum(0);
+                    break;
+                case "三等奖":
+                    expertProject.setThirdNum(0);
+                    break;
+            }
+            return;
+        }
+
         switch (prize) {
             case "特等奖":
                 expertProject.setSpecialNum(1);
@@ -265,6 +284,7 @@ public class UserService {
                 break;
             case "三等奖":
                 expertProject.setThirdNum(1);
+                break;
         }
     }
 }
