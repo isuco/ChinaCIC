@@ -142,10 +142,31 @@ public class AdminController {
     public String getVoteResultView(@RequestParam String type, ModelMap resMap) {
         if (adminService.getUnVotedCount() == 0 || ConfigService.finalWatch) {
             List<Project> projects;
-            if (!ConfigService.finalWatch) {
+            if (!ConfigService.finalWatch && ConfigService.prize != null) {
                 projects = adminService.getVoteResult();
+                // 显示单项结果
+                switch (ConfigService.prize.type){
+                    case "特等奖":
+                        resMap.put("showSpecial", true);
+                        break;
+                    case "一等奖":
+                        resMap.put("showFirst", true);
+                        break;
+                    case "二等奖":
+                        resMap.put("showSecond", true);
+                        break;
+                    case "三等奖":
+                        resMap.put("showThird", true);
+                        break;
+                }
             } else {
                 projects = adminService.getRankResult();
+
+                // 开启全部显示
+                resMap.put("showSpecial", true);
+                resMap.put("showFirst", true);
+                resMap.put("showSecond", true);
+                resMap.put("showThird", true);
             }
 
             int special = 0, level1 = 0, level2 = 0, level3 = 0;
@@ -156,14 +177,11 @@ public class AdminController {
                 level3 += p.getThirdNum();
             }
             resMap.put("totalOfSpecial", special);
-            if (special > 0) resMap.put("showSpecial", true);
             resMap.put("totalOfFirst", level1);
-            if (level1 > 0) resMap.put("showFirst", true);
             resMap.put("totalOfSecond", level2);
-            if (level2 > 0) resMap.put("showSecond", true);
             resMap.put("totalOfThird", level3);
-            if (level3 > 0) resMap.put("showThird", true);
             resMap.put("numberOfWaiting", 0);
+
             if (type.contains("rank")) {
                 projects.sort((p1, p2) -> {
                     if (p1.getSpecialNum() != p2.getSpecialNum()) {

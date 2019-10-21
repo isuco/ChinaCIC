@@ -23,16 +23,16 @@ public class JudgePrizeService {
     }
 
     public boolean isFirst(int special, int first) {
-        return !isSpecial(special) && special + first >= firstThreshold;
+        return !isSpecial(special) &&  first >= firstThreshold;
     }
 
     public boolean isSecond(int special, int first, int second) {
-        return !isSpecial(special) && !isFirst(special, first) && special + first + second >= secondThreshold;
+        return !isSpecial(special) && !isFirst(special, first) && second >= secondThreshold;
     }
 
     public boolean isThird(int special, int first, int second, int third) {
         return !isSpecial(special) && !isFirst(special, first) && !isSecond(special, first, second) &&
-                special + first + second + third >= thirdThreshold;
+                third >= thirdThreshold;
     }
 
 }

@@ -3,6 +3,11 @@ body{
 	MARGIN-TOP: 0px;
 }
 
+.sign{
+	margin-top: 25px;
+	font-weight: bold;
+}
+
 .logo{
 	background:url(../img/logo_ico.png) no-repeat;
 	height:140px;

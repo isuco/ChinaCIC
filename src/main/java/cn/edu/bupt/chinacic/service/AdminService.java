@@ -169,21 +169,21 @@ public class AdminService {
         return projectRepository.queryByPublish().stream()
                 .map(p -> {
                     Project target = new Project(p);
-                    if (ConfigService.prize != Prize.ALL) {
-                        target.setSpecialNum(0);
-                        target.setFirstNum(0);
-                        target.setSecondNum(0);
-                        target.setThirdNum(0);
-                        if (ConfigService.prize == Prize.SPECIAL) {
-                            target.setSpecialNum(p.getSpecialNum());
-                        } else if (ConfigService.prize == Prize.FIRST) {
-                            target.setFirstNum(p.getFirstNum());
-                        } else if (ConfigService.prize == Prize.SECOND) {
-                            target.setSecondNum(p.getSecondNum());
-                        } else if (ConfigService.prize == Prize.THIRD) {
-                            target.setThirdNum(p.getThirdNum());
-                        }
-                    }
+//                    if (ConfigService.prize != Prize.ALL) {
+//                        target.setSpecialNum(0);
+//                        target.setFirstNum(0);
+//                        target.setSecondNum(0);
+//                        target.setThirdNum(0);
+//                        if (ConfigService.prize == Prize.SPECIAL) {
+//                            target.setSpecialNum(p.getSpecialNum());
+//                        } else if (ConfigService.prize == Prize.FIRST) {
+//                            target.setFirstNum(p.getFirstNum());
+//                        } else if (ConfigService.prize == Prize.SECOND) {
+//                            target.setSecondNum(p.getSecondNum());
+//                        } else if (ConfigService.prize == Prize.THIRD) {
+//                            target.setThirdNum(p.getThirdNum());
+//                        }
+//                    }
                     return target;
                 }).collect(Collectors.toList());
     }
@@ -212,21 +212,21 @@ public class AdminService {
         return projectRepository.queryByPublish().stream()
                 .map(p -> {
                     Project target = new Project(p);
-                    if (ConfigService.prize != Prize.ALL) {
-                        target.setSpecialNum(0);
-                        target.setFirstNum(0);
-                        target.setSecondNum(0);
-                        target.setThirdNum(0);
-                        if (p.getPrize().equals(Prize.SPECIAL.type)) {
-                            target.setSpecialNum(p.getSpecialNum());
-                        } else if ((p.getPrize().equals(Prize.FIRST.type))) {
-                            target.setFirstNum(p.getFirstNum());
-                        } else if (p.getPrize().equals(Prize.SECOND.type)) {
-                            target.setSecondNum(p.getSecondNum());
-                        } else if (p.getPrize().equals(Prize.THIRD.type)) {
-                            target.setThirdNum(p.getThirdNum());
-                        }
-                    }
+//                    if (ConfigService.prize != Prize.ALL) {
+//                        target.setSpecialNum(0);
+//                        target.setFirstNum(0);
+//                        target.setSecondNum(0);
+//                        target.setThirdNum(0);
+//                        if (p.getPrize().equals(Prize.SPECIAL.type)) {
+//                            target.setSpecialNum(p.getSpecialNum());
+//                        } else if ((p.getPrize().equals(Prize.FIRST.type))) {
+//                            target.setFirstNum(p.getFirstNum());
+//                        } else if (p.getPrize().equals(Prize.SECOND.type)) {
+//                            target.setSecondNum(p.getSecondNum());
+//                        } else if (p.getPrize().equals(Prize.THIRD.type)) {
+//                            target.setThirdNum(p.getThirdNum());
+//                        }
+//                    }
                     return target;
                 }).collect(Collectors.toList());
     }

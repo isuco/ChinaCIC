@@ -13,51 +13,52 @@
     var today = new Date(); //新建一个Date对象
     var year = today.getFullYear();//查询年份
 
-    document.write("<h2 class='print_head'>" + year + "年中国通信学会科学技术奖评审工作系统" + "</h2>");
+    document.write("<h2 class='print_head' style='font-size: 25px;margin-top: 10px;'>" + year + "年中国通信学会科学技术奖评审工作系统" + "</h2>");
 </script>
 
-<div id="vote_bar1" th:if="${numberOfWaiting == 0}" class="container table-responsive text-center" style="margin-top: 30px">
+<div id="vote_bar1" th:if="${numberOfWaiting == 0}" class="container-fluid table-responsive text-center" style="margin-top: 30px;width: 90%;">
     <table>
         <thead class="tbtrTitle">
-        <tr style="font-size: 15px">
+        <tr style="font-size: 15px;">
             <td style="width: 5%;">编号</td>
-            <td style="width: 7%;">特等奖</td>
-            <td style="width: 7%;">一等奖</td>
-            <td style="width: 7%;">二等奖</td>
-            <td style="width: 7%;">三等奖</td>
-            <td style="width: 13%;">项目类别</td>
+            <td style="width: 5%;">特等奖</td>
+            <td style="width: 5%;">一等奖</td>
+            <td style="width: 5%;">二等奖</td>
+            <td style="width: 5%;">三等奖</td>
+            <td style="width: 10%;">项目类别</td>
             <td style="width: 30%;">项目名称</td>
-            <td>提名单位</td>
+            <td style="width: 20%;">主要完成单位</td>
+            <td style="width: 10%;">获得奖项</td>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="project:${projects}">
-            <td style="font-size: 13px;" class="docindex" th:text="${project.number}"></td>
-            <td class="levelOneScore" style="font-size:15px;" th:text="${project.specialNum}"></td>
-            <td class="levelOneScore" style="font-size:15px;" th:text="${project.firstNum}"></td>
-            <td class="levelTwoScore" style="font-size:15px;" th:text="${project.secondNum}"></td>
-            <td class="levelThreeScore" style="font-size:15px;" th:text="${project.thirdNum}"></td>
-            <td class="levelThreeScore" style="font-size:15px;" th:text="${project.type}"></td>
-            <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.name}"></td>
-            <td style="WORD-WRAP: break-word; padding: 0px 8px;font-size: 15px" class="docname" th:text="${project.recoUnit}"></td>
+        <tr th:each="project:${projects}" style="font-size: 15px;">
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.number}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.specialNum}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.firstNum}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.secondNum}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.thirdNum}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.recoUnit}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.name}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.mainCompUnit}"></td>
+            <td style="font-weight:bold" class="levelOneTd" th:text="${project.prize}"></td>
         </tr>
 
-        <!--<tr>-->
-            <!--<td style="font-size:28px;">总计</td>-->
-            <!--<td class="levelOneScore" style="font-size:15px;" th:text="${totalOfSpecial}">"</td>-->
-            <!--<td class="levelOneScore" style="font-size:15px" th:text="${totalOfFirst}">"</td>-->
-            <!--<td class="levelTwoScore" style="font-size:15px" th:text="${totalOfSecond}"></td>-->
-            <!--<td class="levelThreeScore" style="font-size:15px" th:text="${totalOfThird}"></td>-->
-            <!--<td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>-->
-            <!--<td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>-->
-            <!--<td style="WORD-WRAP: break-word; padding: 0px 8px;"></td>-->
-        <!--</tr>-->
+        <tr style="font-size: 15px;">
+            <td style="font-weight:bold" class="levelOneTd" >总计</td>
+            <td class="levelOneTd" style="font-weight:bold" th:text="${totalOfSpecial}">"</td>
+            <td class="levelOneTd" style="font-weight:bold" th:text="${totalOfFirst}">"</td>
+            <td class="levelOneTd" style="font-weight:bold" th:text="${totalOfSecond}"></td>
+            <td class="levelOneTd" style="font-weight:bold" th:text="${totalOfThird}"></td>
+            <td colspan="5"></td>
+        </tr>
+
         </tbody>
     </table>
 </div>
-<!--<div class="text-center">-->
-    <!--<p style="font-size:15px"><a href="admin?page=rank">主任委员签字：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></p>-->
-<!--</div>-->
+<div class="text-center">
+    <p class="sign" >主任委员签字：__________________</p>
+</div>
 
 <script src="/js/jquery-3.3.1.js"></script>
 </body>
