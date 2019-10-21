@@ -103,6 +103,7 @@ public class UserService {
             vo.setProjectName(project.getNumber() + " " + project.getName());
             vo.setCompUnit(project.getMainCompUnit());
             vo.setType(project.getType());
+            vo.setRecoUnit(project.getRecoUnit());
 //            if (!expert.isVoted()) {
 //                vo.setVoted(false);
 //                vo.setPrize("无");
@@ -229,6 +230,7 @@ public class UserService {
                 else project.setPrize("无");
             }
         }
+        // TODO Q4
         projects.forEach(p-> p.setPublish(false));
         projectRepository.saveAll(projects);
     }

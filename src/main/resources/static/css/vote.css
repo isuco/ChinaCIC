@@ -11,3 +11,11 @@
 .info-error{
     color: red;
 }
+
+.bottom-btn{
+    margin: 20px 10px;
+}
+
+.btn{
+    font-size: 30px;
+}

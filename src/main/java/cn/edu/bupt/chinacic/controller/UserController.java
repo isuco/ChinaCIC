@@ -8,6 +8,7 @@ import cn.edu.bupt.chinacic.service.IndexService;
 import cn.edu.bupt.chinacic.service.UserService;
 import cn.edu.bupt.chinacic.util.CommonResult;
 import cn.edu.bupt.chinacic.util.NetworkUtils;
+import cn.edu.bupt.chinacic.util.Prize;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,11 +77,13 @@ public class UserController {
     public String getVoteView(HttpServletRequest request, ModelMap resMap) {
         String ip = NetworkUtils.getIpAddr(request);
         // 投票奖项
-        List<String> voteItems = ConfigService.voteItems;
-        if (voteItems.size() == 0){
+        Prize prize = ConfigService.prize;
+        if (prize == null){
             resMap.addAttribute("error", "没有开启投票");
             return "vote-error";
         }
+        List<String> voteItems = ConfigService.voteItems;
+        resMap.addAttribute("item", prize.type);
         resMap.addAttribute("prizes", voteItems);
 
         // 已经投票过

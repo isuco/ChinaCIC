@@ -102,7 +102,7 @@ public class AdminController {
         if (StringUtils.isEmpty(csvPath)) {
             return CommonResult.failure("请填写文件路径");
         }
-        if (adminService.clearDatabase()&&adminService.readCSV(csvPath)) {
+        if (adminService.clearDatabase() && adminService.readCSV(csvPath)) {
             return CommonResult.success("参评项目初始化成功");
         } else {
             return CommonResult.failure("初始化失败");

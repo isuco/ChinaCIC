@@ -2,6 +2,7 @@ $(function () {
 
     let publishBtn = $("#submit-publish-btn");
     let projectsUl = $('#projects-ul');
+    let selectSpecialBtn = $('#select-special-btn');
     let selectFirstBtn = $('#select-first-btn');
     let selectSecondBtn = $("#select-second-btn");
     let selectThirdBtn = $('#select-third-btn');
@@ -25,8 +26,8 @@ $(function () {
         "hideMethod": "fadeOut"
     };
 
+    // 获取所有项目
     fetchAllProjects();
-
 
     function fetchAllProjects() {
         $.ajax({
@@ -56,11 +57,9 @@ $(function () {
         });
     }
 
-
+    // 发布项目
     publishBtn.click(function () {
-
         let publishProjects = [];
-
         projectsUl.find('input').each(function () {
             let projectId = $(this).attr('id');
             let isPublish = $(this).is(':checked');
@@ -91,6 +90,7 @@ $(function () {
         });
     });
 
+    // 选择提名一等奖
     selectFirstBtn.click(function () {
         projectsUl.empty();
         for (let i = 0; i < content.length; ++i) {
@@ -104,6 +104,7 @@ $(function () {
         }
     });
 
+    // 选择提名二等 + 一等落选
     selectSecondBtn.click(function () {
         projectsUl.empty();
         for (let i = 0; i < content.length; ++i) {
@@ -117,6 +118,7 @@ $(function () {
         }
     });
 
+    // 选择提名三等奖
     selectThirdBtn.click(function () {
         projectsUl.empty();
         for (let i = 0; i < content.length; ++i) {
@@ -179,7 +181,7 @@ $(function () {
                 url: '/admin/project/ini',
                 type: 'POST',
                 dataType: 'json',
-                data: {'dirPath': dirPath},
+                data: {'csvPath': dirPath},
                 success: (result) => {
                     toastr.options.timeout = 2000;
                     if (result['code'] !== 'FAILURE') {

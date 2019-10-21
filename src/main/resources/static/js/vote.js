@@ -32,4 +32,19 @@ $(document).ready(function(){
             eventDOM.children("img").attr("src", "/img/selected.png");
         }
     });
+
+    /**
+     * 清空投票选项
+     */
+    $("#clearVote").on("click",function(){
+        $(".chose-prize").each(function(i, e){
+            // 将checked 设置成 false
+            $(e).data("checked", false);
+            // 将图片设置成 unselected
+            $(e).children("img").attr("src", "/img/unSelected.png");
+            // 将input 设置成 无
+            const projectId = $(e).parent().children("#projectId").text();
+            $('input[name=' + projectId + ']').val("无");
+        });
+    });
 });

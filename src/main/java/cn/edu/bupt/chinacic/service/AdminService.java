@@ -86,14 +86,17 @@ public class AdminService {
                 ConfigService.voteItems.add("一等奖");
                 ConfigService.voteItems.add("二等奖");
                 ConfigService.voteItems.add("三等奖");
+                ConfigService.voteItems.add("无");
                 projects=projectRepository.queryByPublish();
         }
-        ConfigService.voteItems.add("无");
         expertRepository.updateUnVoted();
+        // 获取投过票的所有专家, 把 voted 设为 false ?
         projects.forEach(p -> p.getExperts().forEach(pp -> pp.setVoted(false)));
+        // 发布所有项目
         projects.forEach(p-> p.setPublish(true));
+        // 提交操作
         projectRepository.saveAll(projects);
-//        expertRepository.updateUnVoted();
+
         return true;
     }
 
@@ -101,77 +104,6 @@ public class AdminService {
         expertprojectRepository.clear();
         expertRepository.clear();
         projectRepository.clear();
-        return true;
-    }
-
-    public boolean parseProject(String dirPath) {
-        File dirFile = new File(dirPath);
-        if (!dirFile.exists() || dirFile.isFile()) {
-            log.error("文件 {} 不存在或不是一个目录", dirPath);
-            return false;
-        }
-        File[] childFiles = dirFile.listFiles(childFile -> childFile.isFile() && childFile.getName().endsWith(".pdf"));
-        PDFTextStripper stripper;
-        try {
-            stripper = new PDFTextStripper();
-        } catch (IOException e) {
-            log.error("创建PDF解析器失败");
-            return false;
-        }
-        Splitter splitter = new Splitter();
-        if (childFiles != null && childFiles.length > 0) {
-            Arrays.sort(childFiles, Comparator.comparing(File::getName));
-            List<Project> projects = new ArrayList<>();
-            for (File childFile : childFiles) {
-                String content = null;
-                PDDocument document = null;
-                try {
-                    document = PDDocument.load(childFile);
-                    content = parseOneProject(stripper, splitter, document);
-                } catch (IOException e) {
-                    log.error("文件{}不能被PDF解析器解析", childFile.getPath());
-                    e.printStackTrace();
-                } finally {
-                    if (document != null) {
-                        try {
-                            document.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                String mainRecUnit = null, mainComUnit = null;
-                if (content == null || StringUtils.isEmpty(content.trim())) {
-                    log.error("文件{}为图片类型PDF", childFile.getPath());
-                } else {
-                    int recStart = content.indexOf("提名者") + "专家推荐".length();
-                    int recEnd = content.indexOf("项目名称");
-                    if (recStart == -1 || recEnd == -1) {
-                        log.error("文件{}解析推荐单位或推荐人失败", childFile.getPath());
-                    } else {
-                        mainRecUnit = content.substring(recStart, recEnd).replace("\n", "");
-                    }
-
-                    int comStart = content.indexOf("主要完成单位") + "主要完成单位".length();
-                    int comEnd = content.indexOf("项目密级");
-                    if (comStart == -1 || comEnd == -1) {
-                        log.error("文件{}解析主要完成单位失败", childFile.getPath());
-                    } else {
-                        mainComUnit = content.substring(comStart, comEnd).replace("\n", "");
-                    }
-                }
-                String[] split = childFile.getName().split(" ");
-
-                projects.add(generateProject(split[0], FileUtils.getFileNameNoExtension(split[1]),
-                        mainRecUnit, mainComUnit, childFile.getName()));
-//                if (project == null) {
-//                    log.error("项目{}持久化失败", childFile.getName());
-//                } else {
-//                    log.info("项目{}持久化成功", childFile.getName());
-//                }
-            }
-            projectRepository.saveAll(projects);
-        }
         return true;
     }
 

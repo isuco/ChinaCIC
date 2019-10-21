@@ -10,6 +10,7 @@ public class VoteItemVo {
     private boolean voted;
     private String projectName;
     private String compUnit;
+    private String recoUnit;
     private String prize;
     private String type;
 
