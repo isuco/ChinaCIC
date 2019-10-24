@@ -17,6 +17,9 @@ public interface ExpertRepository extends JpaRepository<Expert, Long> {
     @Query("select count(e.id) from Expert e where e.isVoted = 1")
     int votedCount();
 
+    @Query("From Expert e")
+    List<Expert> queryAll();
+
     @Modifying
     @Query("update Expert e set e.isVoted = 0")
     void updateUnVoted();

@@ -26,13 +26,14 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         if (!url.equals("/user/registry") && !url.equals("/admin/login")) {
             if (url.startsWith("/admin")) {
                 Boolean adminLogin = Boolean.valueOf(String.valueOf(request.getSession().getAttribute("adminLogin")));
-                if (adminLogin) {
-                    return true;
-                } else {
-                    log.warn("需要管理员权限，已重定向到管理员登录页面");
-                    response.sendRedirect("/admin/login");
-                    return false;
-                }
+                return true;
+//                if (adminLogin) {
+//                    return true;
+//                } else {
+//                    log.warn("需要管理员权限，已重定向到管理员登录页面");
+//                    response.sendRedirect("/admin/login");
+//                    return false;
+//                }
             }
             if (indexService.needRegistry(NetworkUtils.getIpAddr(request))) {
                 log.warn("需要专家权限，已重定向到专家登录页面");

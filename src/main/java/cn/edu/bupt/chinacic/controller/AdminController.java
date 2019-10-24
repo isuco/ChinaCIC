@@ -7,6 +7,7 @@ import cn.edu.bupt.chinacic.service.AdminService;
 import cn.edu.bupt.chinacic.service.ConfigService;
 import cn.edu.bupt.chinacic.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
+import org.dom4j.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -154,6 +155,7 @@ public class AdminController {
                         break;
                     case "二等奖":
                         resMap.put("showSecond", true);
+                        resMap.put("showThird", true);
                         break;
                     case "三等奖":
                         resMap.put("showThird", true);
@@ -230,6 +232,18 @@ public class AdminController {
             res.put("count", unVotedCount);
             return CommonResult.success("投票未结束", res);
         }
+    }
+
+    @PostMapping("print/expert")
+    @ResponseBody
+    public CommonResult generateAllExpertVoteFile() {
+        try {
+            adminService.generateAllExpertVoteFile();
+        }catch (Exception e){
+            return CommonResult.failure("生成文件失败");
+        }
+
+        return CommonResult.success("生成文件成功");
     }
 
 }

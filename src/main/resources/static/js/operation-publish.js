@@ -79,4 +79,24 @@ $(document).ready(function(){
         tableDOM.clear();
         tableDOM.find("input[data-prizewant='提名三等']").prop("checked", true);
     });
+
+    /**
+     * 打印个人投票结果
+     */
+    const printPersonBtn = $("#print-person");
+    printPersonBtn.click(function() {
+        $.ajax({
+            url: '/admin/print/expert',
+            type: 'POST',
+            success: function (result){
+                if (result['code'] !== 'FAILURE') {
+                    toastr.options.timeout = 2000;
+                    toastr.info(result['reason']);
+                } else {
+                    toastr.options.timeout = 2000;
+                    toastr.error(result['reason']);
+                }
+            }
+        });
+    })
 });

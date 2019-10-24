@@ -34,10 +34,7 @@ public class UserService {
 
     private JudgePrizeService judgePrizeService;
 
-    private PrintService printService;
 
-    @Value("${resultFilePath}")
-    private String resultFilePath;
 
     @Autowired
     public void setProjectRepository(ProjectRepository projectRepository) {
@@ -59,10 +56,6 @@ public class UserService {
         this.judgePrizeService = judgePrizeService;
     }
 
-    @Autowired
-    public void setPrintService(PrintService printService) {
-        this.printService = printService;
-    }
 
     @Transactional
     public boolean registryUser(String ip, String name) {
@@ -163,32 +156,13 @@ public class UserService {
         expert.setVoted(true);
         expertRepository.save(expert);
 
-        // 获取该专家需要打印的数据
-        List<Project> projects = projectRepository.queryByPublish();
-        List<ExpertProject> printExpertProjects = projects.stream().map(p -> {
-            ExpertProjectPrimaryKey key = new ExpertProjectPrimaryKey(expert.getId(), p.getId());
-            ExpertProject persistOne = expertProjectRepository.getOne(key);
-            ExpertProject tmpOne = new ExpertProject();
-            tmpOne.setProject(persistOne.getProject());
-            if (ConfigService.prize == Prize.SPECIAL || ConfigService.prize == Prize.ALL) {
-                tmpOne.setSpecialNum(persistOne.getSpecialNum());
-            } else if (ConfigService.prize == Prize.FIRST || ConfigService.prize == Prize.ALL) {
-                tmpOne.setFirstNum(persistOne.getFirstNum());
-            } else if (ConfigService.prize == Prize.SECOND || ConfigService.prize == Prize.ALL) {
-                tmpOne.setSecondNum(persistOne.getSecondNum());
-            } else if (ConfigService.prize == Prize.THIRD || ConfigService.prize == Prize.ALL) {
-                tmpOne.setThirdNum(persistOne.getThirdNum());
-            }
-            return tmpOne;
-        }).collect(Collectors.toList());
-        printService.printVotePerExpert(printExpertProjects, expert,
-                resultFilePath + ConfigService.prize.type + "/" + expert.getName());
-
         // 更新最终投票结果
         if (expertRepository.votedCount() == expertRepository.count()) {
             finishVote();
         }
+
     }
+
 
     @Transactional
     public void finishVote() {

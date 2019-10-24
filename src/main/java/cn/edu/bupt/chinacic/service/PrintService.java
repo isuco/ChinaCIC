@@ -3,6 +3,7 @@ package cn.edu.bupt.chinacic.service;
 import cn.edu.bupt.chinacic.pojo.po.Expert;
 import cn.edu.bupt.chinacic.pojo.po.ExpertProject;
 import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -22,96 +23,90 @@ import java.util.List;
 @Slf4j
 public class PrintService {
 
-    private Calendar calendar;
+    private PdfPCell newCell(String content, Font font, int colspan){
+        PdfPCell retCell = new PdfPCell(new Paragraph(content, font));
+        retCell.setColspan(colspan);
+        centerAlignment(retCell);
 
-    @PostConstruct
-    public void init() {
-        calendar = Calendar.getInstance();
+        return retCell;
     }
 
-    @Async
     public void printVotePerExpert(List<ExpertProject> votesOfExpert, Expert expert, String filePath) {
         Document document;
         try {
-            document = openDocument(filePath);
+            document = openDocument(filePath, expert.getName());
         } catch (IOException | DocumentException e) {
-            log.error("{}专家投票结果文件创建失败");
+            log.error("{}专家投票结果文件创建失败", expert.getName());
             return;
         }
 
+        // 标题
+        Calendar calendar = Calendar.getInstance();
+        String title = calendar.get(Calendar.YEAR) + "年度中国通信学会科学技术奖评审委员会选票";
+        Paragraph titlePara = new Paragraph(title, FontFactory.getFont("STSong-Light","UniGB-UCS2-H", 20, Font.BOLD, BaseColor.BLACK));
+        titlePara.setAlignment(Element.ALIGN_CENTER);
+        titlePara.setSpacingAfter(15);
+
+        // 表格
+        PdfPTable table = new PdfPTable(27);
         Font cellFont = FontFactory.getFont("STSong-Light", "UniGB-UCS2-H", 12);
-        PdfPTable table = new PdfPTable(11);
-        Font titleFont = FontFactory.getFont("STSong-Light", "UniGB-UCS2-H", 12, Font.BOLD);
-        PdfPCell titleCell = new PdfPCell(new Paragraph(calendar.get(Calendar.YEAR) + "年度中国通信学会科学技术奖评审委员会选票", titleFont));
-        titleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        titleCell.setColspan(11);
-        titleCell.setMinimumHeight(20);
-        table.addCell(titleCell);
+        Font cellTitleFont = FontFactory.getFont("STSong-Light", "UniGB-UCS2-H", 12, Font.BOLD);
 
-        PdfPCell numTitleCell = new PdfPCell(new Paragraph("编号", cellFont));
-        PdfPCell specialTitleCell = new PdfPCell(new Paragraph("特等奖", cellFont));
-        PdfPCell firstTitleCell = new PdfPCell(new Paragraph("一等奖", cellFont));
-        PdfPCell secondTitleCell = new PdfPCell(new Paragraph("二等经", cellFont));
-        PdfPCell thirdTitleCell = new PdfPCell(new Paragraph("三等奖", cellFont));
-        PdfPCell nameTitleCell = new PdfPCell(new Paragraph("项目名称", cellFont));
-        nameTitleCell.setColspan(3);
-        PdfPCell recUnitTitleCell = new PdfPCell(new Paragraph("提名单位", cellFont));
-        recUnitTitleCell.setColspan(3);
-
-        centerAlignment(numTitleCell);
-        table.addCell(numTitleCell);
-        centerAlignment(specialTitleCell);
-        table.addCell(specialTitleCell);
-        centerAlignment(firstTitleCell);
-        table.addCell(firstTitleCell);
-        centerAlignment(secondTitleCell);
-        table.addCell(secondTitleCell);
-        centerAlignment(thirdTitleCell);
-        table.addCell(thirdTitleCell);
-        centerAlignment(nameTitleCell);
-        table.addCell(nameTitleCell);
-        centerAlignment(recUnitTitleCell);
-        table.addCell(recUnitTitleCell);
+        table.addCell(newCell("编号", cellTitleFont, 2));
+        table.addCell(newCell("特等奖", cellTitleFont, 1));
+        table.addCell(newCell("一等奖", cellTitleFont, 1));
+        table.addCell(newCell("二等奖", cellTitleFont, 1));
+        table.addCell(newCell("三等奖", cellTitleFont, 1));
+        table.addCell(newCell("项目名称", cellTitleFont, 8));
+        table.addCell(newCell("主要完成单位", cellTitleFont, 6));
+        table.addCell(newCell("项目类别", cellTitleFont, 4));
+        table.addCell(newCell("获奖结果", cellTitleFont, 3));
 
         for (ExpertProject votePerExpert : votesOfExpert) {
-            PdfPCell numCell = new PdfPCell(new Paragraph(votePerExpert.getProject().getNumber(), cellFont));
-            numCell.setMinimumHeight(20);
-            centerAlignment(numCell);
-            PdfPCell specialCell = transIntToChar(votePerExpert.getSpecialNum(), "√", "×", cellFont);
-            specialCell.setMinimumHeight(20);
-            centerAlignment(specialCell);
-            PdfPCell firstCell = transIntToChar(votePerExpert.getFirstNum(), "√", "×", cellFont);
-            firstCell.setMinimumHeight(20);
-            centerAlignment(firstCell);
-            PdfPCell secondCell = transIntToChar(votePerExpert.getSecondNum(), "√", "×", cellFont);
-            secondCell.setMinimumHeight(20);
-            centerAlignment(secondCell);
-            PdfPCell thirdCell = transIntToChar(votePerExpert.getThirdNum(), "√", "×", cellFont);
-            thirdCell.setMinimumHeight(20);
-            centerAlignment(thirdCell);
-            PdfPCell nameCell = new PdfPCell(new Paragraph(votePerExpert.getProject().getNumber() + " "
-                    + votePerExpert.getProject().getName(), cellFont));
-            nameCell.setMinimumHeight(20);
-            nameCell.setColspan(3);
-            centerAlignment(nameCell);
-            PdfPCell recUnitCell = new PdfPCell(new Paragraph(votePerExpert.getProject().getRecoUnit(), cellFont));
-            recUnitCell.setMinimumHeight(20);
-            recUnitCell.setColspan(3);
-            centerAlignment(recUnitCell);
-            table.addCell(numCell);
-            table.addCell(specialCell);
-            table.addCell(firstCell);
-            table.addCell(secondCell);
-            table.addCell(thirdCell);
-            table.addCell(nameCell);
-            table.addCell(recUnitCell);
+            // 编号
+            table.addCell(newCell(votePerExpert.getProject().getNumber(), cellFont, 2));
+            // 特等奖
+            table.addCell(transIntToChar(votePerExpert.getSpecialNum(), "√", "×", cellFont, 1));
+            // 一等奖
+            table.addCell(transIntToChar(votePerExpert.getFirstNum(), "√", "×", cellFont, 1));
+            // 二等奖
+            table.addCell(transIntToChar(votePerExpert.getSecondNum(), "√", "×", cellFont, 1));
+            // 三等奖
+            table.addCell(transIntToChar(votePerExpert.getThirdNum(), "√", "×", cellFont, 1));
+            // 项目名称
+            String name = votePerExpert.getProject().getNumber() + " " + votePerExpert.getProject().getName();
+            table.addCell(newCell(name, cellFont, 8));
+            // 主要完成单位
+            table.addCell(newCell(votePerExpert.getProject().getMainCompUnit(), cellFont, 6));
+            // 项目类别
+            table.addCell(newCell(votePerExpert.getProject().getRecoUnit(), cellFont, 4));
+            // 获奖结果
+            table.addCell(newCell(votePerExpert.getProject().getPrize(), cellFont, 3));
+//            numCell.setMinimumHeight(20);
         }
+        table.setHeaderRows(1);
+
+        // 签字
+//        String sign = expert.getName() + " 专家签字 :  ____________";
+//        Paragraph signPara = new Paragraph(sign, FontFactory.getFont("STSong-Light","UniGB-UCS2-H", 12, Font.BOLD, BaseColor.BLACK));
+//        signPara.setAlignment(Element.ALIGN_CENTER);
+//        signPara.setSpacingBefore(10);
+
         try {
+            // 添加表头
+            document.add(titlePara);
+            // 添加表格
             document.add(table);
+
+            // 添加签字区
+//            document.add(signPara);
+
         } catch (DocumentException e) {
             log.error("{}专家表格生成失败", expert.getName());
         }
         log.info("{}专家投票文件生成成功，文件位置：{}", expert.getName(), filePath);
+
+//        document.setMargins(5,5,10,10);
         document.close();
     }
 
@@ -122,15 +117,16 @@ public class PrintService {
         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
     }
 
-    private PdfPCell transIntToChar(int vote, String right, String wrong, Font cellFont) {
+    private PdfPCell transIntToChar(int vote, String right, String wrong, Font cellFont, int colspan) {
         PdfPCell pdfPCell;
-        if (vote != 0) pdfPCell = new PdfPCell(new Paragraph(right, cellFont));
-        else pdfPCell = new PdfPCell(new Paragraph(wrong, cellFont));
+        if (vote != 0) pdfPCell = newCell(right, cellFont, colspan);
+        else pdfPCell = newCell(wrong, cellFont, colspan);
+
         return pdfPCell;
     }
 
-    private Document openDocument(String filePath) throws FileNotFoundException, DocumentException {
-        Document document = new Document();
+    private Document openDocument(String filePath, String expertName) throws FileNotFoundException, DocumentException {
+        Document document = new Document(PageSize.A4, 5,5,15,15);
         boolean pdfSuffix = filePath.endsWith(".pdf");
         if (pdfSuffix) {
             filePath = filePath.substring(0, filePath.length() - 4);
@@ -142,7 +138,8 @@ public class PrintService {
         }
         File pdfDir = pdfFile.getParentFile();
         if (!pdfDir.exists()) pdfDir.mkdirs();
-        PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfFile));
+        writer.setPageEvent(new PrintPDFHandler(expertName));
         document.open();
         return document;
     }

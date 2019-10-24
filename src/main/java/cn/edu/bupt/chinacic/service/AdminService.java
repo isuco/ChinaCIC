@@ -1,8 +1,11 @@
 package cn.edu.bupt.chinacic.service;
 
 import cn.edu.bupt.chinacic.pojo.jo.PublishProjectJo;
+import cn.edu.bupt.chinacic.pojo.po.Expert;
+import cn.edu.bupt.chinacic.pojo.po.ExpertProject;
 import cn.edu.bupt.chinacic.pojo.po.NumToName;
 import cn.edu.bupt.chinacic.pojo.po.Project;
+import cn.edu.bupt.chinacic.pojo.po.key.ExpertProjectPrimaryKey;
 import cn.edu.bupt.chinacic.pojo.vo.PublishProjectVo;
 import cn.edu.bupt.chinacic.repository.ExpertProjectRepository;
 import cn.edu.bupt.chinacic.repository.ExpertRepository;
@@ -15,6 +18,7 @@ import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -33,8 +37,11 @@ public class AdminService {
 
     private ProjectRepository projectRepository;
     private ExpertRepository expertRepository;
-    private NumNameRepository numNameRepository;
     private ExpertProjectRepository expertprojectRepository;
+    private PrintService printService;
+
+    @Value("${resultFilePath}")
+    private String resultFilePath;
 
     @Autowired
     public void setProjectRepository(ProjectRepository projectRepository) {
@@ -52,8 +59,8 @@ public class AdminService {
     }
 
     @Autowired
-    public void setNumNameRepository(NumNameRepository numNameRepository) {
-        this.numNameRepository = numNameRepository;
+    public void setPrintService(PrintService printService) {
+        this.printService = printService;
     }
 
     @Transactional
@@ -209,7 +216,7 @@ public class AdminService {
     }
 
     public List<Project> getRankResult() {
-        return projectRepository.queryByPublish().stream()
+        return projectRepository.queryAll().stream()
                 .map(p -> {
                     Project target = new Project(p);
 //                    if (ConfigService.prize != Prize.ALL) {
@@ -229,5 +236,30 @@ public class AdminService {
 //                    }
                     return target;
                 }).collect(Collectors.toList());
+    }
+
+    /**
+     * 打印所有专家投票结果
+     */
+    public void generateAllExpertVoteFile(){
+        // 获取全部项目
+        List<Expert> experts = expertRepository.queryAll();
+        List<Project> projects = projectRepository.queryAll();
+        for (Expert expert: experts){
+            List<ExpertProject> printExpertProjects = projects.stream().map(p -> {
+                ExpertProjectPrimaryKey key = new ExpertProjectPrimaryKey(expert.getId(), p.getId());
+                // 获得关系数据
+                Optional<ExpertProject> expertProjectOptional = expertprojectRepository.findById(key);
+                // 获取专家投票
+                ExpertProject expertProject = expertProjectOptional.orElseGet(() -> {
+                    ExpertProject e = new ExpertProject();
+                    e.setProject(p);
+                    return e;
+                });
+
+                return expertProject;
+            }).collect(Collectors.toList());
+            printService.printVotePerExpert(printExpertProjects, expert, resultFilePath + expert.getName());
+        }
     }
 }
